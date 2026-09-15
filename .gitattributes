@@ -1,2 +1,2 @@
-*.glb filter=lfs diff=lfs merge=lfs -text
+# GLBs stay as regular Git blobs (GitHub LFS budget exceeded; files are under 50MB).
 *.glb !text !filter !merge !diff
