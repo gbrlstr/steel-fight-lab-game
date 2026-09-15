@@ -2,11 +2,88 @@
 import { sfx } from '../game/audio/game-audio'
 
 const art = new URL('../assets/menu/steelfightlab_titlescreen_art.png', import.meta.url).href
+const videoSrc = new URL('../assets/menu/background_video.mp4', import.meta.url).href
 const logo = new URL('../assets/menu/steelfightlab_logo.png', import.meta.url).href
+
+const videoA = ref<HTMLVideoElement | null>(null)
+const videoB = ref<HTMLVideoElement | null>(null)
+const active = ref<'a' | 'b'>('a')
+const fading = ref(false)
+
+const LOOP_START = 1
+/** Seconds before the end to start blending into the next pass. */
+const CROSSFADE = 0.8
 
 useHead({ title: 'Steel Fight Lab' })
 
-onMounted(() => sfx.menu())
+function other(): 'a' | 'b' {
+  return active.value === 'a' ? 'b' : 'a'
+}
+
+function el(which: 'a' | 'b') {
+  return which === 'a' ? videoA.value : videoB.value
+}
+
+async function prepare(node: HTMLVideoElement | null) {
+  if (!node) return
+  node.pause()
+  if (node.readyState < 1) {
+    await new Promise<void>(resolve => {
+      node.addEventListener('loadedmetadata', () => resolve(), { once: true })
+    })
+  }
+  node.currentTime = LOOP_START
+  await new Promise<void>(resolve => {
+    const done = () => resolve()
+    if (Math.abs(node.currentTime - LOOP_START) < 0.05) {
+      done()
+      return
+    }
+    node.addEventListener('seeked', done, { once: true })
+  })
+}
+
+async function startCrossfade() {
+  if (fading.value) return
+  const fromKey = active.value
+  const toKey = other()
+  const from = el(fromKey)
+  const to = el(toKey)
+  if (!from || !to || !from.duration) return
+
+  fading.value = true
+  await prepare(to)
+  void to.play().catch(() => {})
+
+  // CSS class drives the opacity blend; swap active after the transition.
+  active.value = toKey
+  window.setTimeout(() => {
+    from.pause()
+    from.currentTime = LOOP_START
+    fading.value = false
+  }, CROSSFADE * 1000)
+}
+
+function onTimeUpdate(which: 'a' | 'b') {
+  if (which !== active.value || fading.value) return
+  const node = el(which)
+  if (!node?.duration || !Number.isFinite(node.duration)) return
+  if (node.currentTime >= node.duration - CROSSFADE) void startCrossfade()
+}
+
+onMounted(() => {
+  sfx.menu()
+  const primary = videoA.value
+  if (!primary) return
+  const boot = async () => {
+    await prepare(primary)
+    void primary.play().catch(() => {})
+    // Warm the second buffer so the first blend is seamless.
+    void prepare(videoB.value)
+  }
+  if (primary.readyState >= 1) void boot()
+  else primary.addEventListener('loadedmetadata', () => void boot(), { once: true })
+})
 
 async function fight() {
   sfx.confirm()
@@ -17,11 +94,36 @@ async function fight() {
 <template>
   <main class="title-screen relative h-full overflow-hidden bg-sleet-ink font-display">
     <UiGithubBanner />
-    <img
-      :src="art"
-      alt=""
-      class="title-art absolute inset-0 h-full w-full object-cover object-[32%_center]"
-    >
+    <div class="title-media absolute inset-0">
+      <img
+        :src="art"
+        alt=""
+        class="title-art absolute inset-0 h-full w-full object-cover object-[32%_center]"
+      >
+      <video
+        ref="videoA"
+        class="title-video absolute inset-0 h-full w-full object-cover object-[32%_center]"
+        :class="{ 'title-video--front': active === 'a', 'title-video--back': active !== 'a' }"
+        :src="videoSrc"
+        :poster="art"
+        muted
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+        @timeupdate="onTimeUpdate('a')"
+      />
+      <video
+        ref="videoB"
+        class="title-video absolute inset-0 h-full w-full object-cover object-[32%_center]"
+        :class="{ 'title-video--front': active === 'b', 'title-video--back': active !== 'b' }"
+        :src="videoSrc"
+        muted
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+        @timeupdate="onTimeUpdate('b')"
+      />
+    </div>
     <div class="title-veil absolute inset-0" aria-hidden="true" />
     <div class="title-grain absolute inset-0" aria-hidden="true" />
 
@@ -29,7 +131,7 @@ async function fight() {
       <img
         :src="logo"
         alt="Steel Fight Lab"
-        class="title-logo w-[min(420px,82vw)] drop-shadow-[0_14px_22px_#000c]"
+        class="title-logo w-[min(420px,78vw)] drop-shadow-[0_14px_22px_#000c]"
       >
 
       <p class="title-tagline mt-5 max-w-[34ch] text-center font-ui text-[11px] leading-5 tracking-[.04em] text-[#c8d5e0]">
@@ -38,7 +140,7 @@ async function fight() {
 
       <UiSleetButton
         gold
-        class="title-cta mt-7 min-h-14 w-[min(280px,78vw)] text-sm tracking-[.16em]"
+        class="title-cta mt-7 min-h-14 w-[min(280px,72vw)] text-sm tracking-[.16em]"
         @click="fight"
       >
         FIGHT!
@@ -84,8 +186,25 @@ async function fight() {
   animation: title-drift 18s linear infinite;
 }
 
+.title-video {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1.15s ease-in-out;
+  pointer-events: none;
+}
+
+.title-video--front {
+  z-index: 2;
+  opacity: 1;
+}
+
+.title-video--back {
+  z-index: 1;
+  opacity: 0;
+}
+
 .title-art {
-  animation: title-ken 22s ease-in-out infinite alternate;
+  z-index: 0;
   transform-origin: 32% center;
 }
 
@@ -129,18 +248,16 @@ async function fight() {
   }
 }
 
-@keyframes title-ken {
-  from { transform: scale(1.02); }
-  to { transform: scale(1.06); }
-}
-
 @keyframes title-drift {
   from { background-position: 0 0, 40px 20px, 10px 30px; }
   to { background-position: 60px 40px, -30px 50px, 40px -20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .title-art,
+  .title-video {
+    display: none;
+  }
+
   .title-grain,
   .title-logo,
   .title-tagline,

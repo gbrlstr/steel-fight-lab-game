@@ -27,15 +27,31 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     const startingState = options.state ?? initial()
     document.title = 'Fight · Steel Fight Lab'
     const get = <E extends HTMLElement = HTMLElement>(id: string) => app.querySelector<E>('#' + id)!
-    get('choose').onclick = () => {
+    let showBoxes = false
+    const boxToggle = app.querySelector<HTMLButtonElement>('#hitboxes')
+    const setBoxes = (on: boolean) => {
+        showBoxes = on
+        if (!boxToggle) return
+        boxToggle.setAttribute('aria-pressed', String(on))
+        boxToggle.style.borderColor = on ? '#3dff9a' : ''
+    }
+    if (boxToggle) {
+        boxToggle.onclick = () => setBoxes(!showBoxes)
+        setBoxes(false)
+    }
+    const bindClick = (id: string, handler: () => void) => {
+        const el = app.querySelector<HTMLElement>('#' + id)
+        if (el) el.onclick = handler
+    }
+    bindClick('choose', () => {
         if (lobbySession.connection?.state) return
         lobbySession.setMode('local')
         options.navigate?.('/select')
-    }
-    get('lobbyreturn').onclick = () => {
+    })
+    bindClick('lobbyreturn', () => {
         if (lobbySession.connection) lobbySession.exit()
         options.navigate?.('/lobby')
-    }
+    })
     get('victory-lobby').onclick = () => {
         if (network) return
         options.navigate?.('/lobby')
@@ -44,11 +60,17 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         if (network || disposed) return
         rematchLocal()
     }
-    let showBoxes = true
-    const boxToggle = get<HTMLButtonElement>('hitboxes')
-    const setBoxes = (on: boolean) => { showBoxes = on; boxToggle.setAttribute('aria-pressed', String(on)); boxToggle.style.borderColor = on ? '#3dff9a' : '' }
-    boxToggle.onclick = () => setBoxes(!showBoxes); setBoxes(true)
-    const shortcuts = (e: KeyboardEvent) => { if (e.code === 'Escape') app.querySelector('.fight-app')!.classList.remove('obs-mode'); if (e.code === 'F9') { e.preventDefault(); get('moves').click() }; if (e.code === 'F8') { e.preventDefault(); setBoxes(!showBoxes) } }
+    const shortcuts = (e: KeyboardEvent) => {
+        if (e.code === 'Escape') app.querySelector('.fight-app')?.classList.remove('obs-mode')
+        if (e.code === 'F9') {
+            e.preventDefault()
+            app.querySelector<HTMLElement>('#moves')?.click()
+        }
+        if (e.code === 'F8' && boxToggle) {
+            e.preventDefault()
+            setBoxes(!showBoxes)
+        }
+    }
     window.addEventListener('keydown', shortcuts)
     const onlineState = lobbySession.connection?.state
     let selected = (onlineState ?? startingState).fighters[0].hero, state = onlineState ?? startingState, network = !!onlineState, room: any = lobbySession.room, connection = lobbySession.connection, disposed = false, generation = 0, raf = 0, last = 0, acc = 0, loaded = false, lastPing = 0, lastHud = 0
@@ -72,7 +94,9 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         get('movetable').innerHTML = '<h3>' + h.name + '</h3><p>A = attack · S = special · comma = command sequence</p><table><thead><tr><th>Move / condition</th><th>Command</th><th>Startup</th><th>Blockstun</th><th>Hitstun</th><th>Damage</th></tr></thead><tbody>' + rows + '</tbody></table>'
     }
 
-    get('moves').onclick = () => { moveTable(); get<HTMLDialogElement>('movelist').showModal() }; get('closemoves').onclick = () => get<HTMLDialogElement>('movelist').close(); get('obs').onclick = () => get('obs').closest('.fight-app')!.classList.toggle('obs-mode')
+    bindClick('moves', () => { moveTable(); get<HTMLDialogElement>('movelist').showModal() })
+    bindClick('closemoves', () => get<HTMLDialogElement>('movelist').close())
+    bindClick('obs', () => app.querySelector('.fight-app')?.classList.toggle('obs-mode'))
     const unsubscribeLobby = lobbySession.subscribe((snapshot, event) => {
         room = snapshot.room
         connection = snapshot.connection
