@@ -1,0 +1,37 @@
+[
+  {
+    "source": "scripts/events/crownfall/fighting_game_hero_tusk.vdata_c",
+    "export": "src/assets/scripts/events/crownfall/fighting_game_hero_tusk.vdata",
+    "sha256": "eca23b030b250a083067a6f07525f3ffe1ac2482a1418f01cdc1d36e2b9ec19a",
+    "purpose": "tusk",
+    "validation": "parsed; original explicit values preserved"
+  },
+  {
+    "source": "scripts/events/crownfall/fighting_game_hero_bristleback.vdata_c",
+    "export": "src/assets/scripts/events/crownfall/fighting_game_hero_bristleback.vdata",
+    "sha256": "15738dae72500b3dd9e2a05f7493f4a8ad0c64d7465cff153b92f340b773bad1",
+    "purpose": "bristleback",
+    "validation": "parsed; original explicit values preserved"
+  },
+  {
+    "source": "scripts/events/crownfall/fighting_game_hero_vengeful.vdata_c",
+    "export": "src/assets/scripts/events/crownfall/fighting_game_hero_vengeful.vdata",
+    "sha256": "319c1744c0aa4d604b398f76c6a67cc0b74c505e94b036ff9de533fd520483d8",
+    "purpose": "vengeful",
+    "validation": "parsed; original explicit values preserved"
+  },
+  {
+    "source": "scripts/events/crownfall/fighting_game_hero_marci.vdata_c",
+    "export": "src/assets/scripts/events/crownfall/fighting_game_hero_marci.vdata",
+    "sha256": "981b89265afd1dc13128f0dd74355d0291e49edd1a1b70e8bee30c6da09b8cbb",
+    "purpose": "marci",
+    "validation": "parsed; original explicit values preserved"
+  },
+  {
+    "source": "scripts/events/crownfall/fighting_game_hero_dawnbreaker.vdata_c",
+    "export": "src/assets/scripts/events/crownfall/fighting_game_hero_dawnbreaker.vdata",
+    "sha256": "c4c368138ad4da1b4694a7660d78843d44d76c12c27816716c6c77719e2fa37f",
+    "purpose": "dawnbreaker",
+    "validation": "parsed; original explicit values preserved"
+  }
+]

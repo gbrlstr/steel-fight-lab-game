@@ -1,0 +1,56 @@
+{
+  "name": "steel-fight-lab-game",
+  "private": false,
+  "version": "0.0.1",
+  "description": "Game client for Steel Fight Lab",
+  "author": "GBRL DEV (gabriel.developed@gmail.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gbrlstr/steel-fight-lab-game.git"
+  },
+  "homepage": "https://github.com/gbrlstr/steel-fight-lab-game",
+  "bugs": {
+    "url": "https://github.com/gbrlstr/steel-fight-lab-game/issues"
+  },
+  "keywords": [
+    "game",
+    "dota-2",
+    "treejs",
+    "multiplayer",
+    "steel-fight-lab",
+    "steel-fight-lab-game",
+    "steel-fight-lab-game-client",
+    "steel-fight-lab-game-client-game",
+    "steel-fight-lab-game-client-game-client"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
+    "postinstall": "nuxt prepare",
+    "mock:server": "node server/index.mjs",
+    "server": "node server/index.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "import:data": "node tools/import-data.mjs",
+    "import:assets": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/import-assets.ps1",
+    "validate:assets": "node tools/validate-assets.mjs"
+  },
+  "devDependencies": {
+    "@types/three": "^0.184.1",
+    "typescript": "~6.0.2",
+    "vue-tsc": "^3.3.11"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^1.0.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "nuxt": "^4.5.2",
+    "pinia": "^4.0.3",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.184.0",
+    "vue": "^3.5.42",
+    "ws": "^8.21.3"
+  }
+}

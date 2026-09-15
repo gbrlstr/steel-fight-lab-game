@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@import "./fight.css";
+@import "./dev.css";
+
+@theme {
+  --color-sleet-ink: #070910;
+  --color-sleet-panel: #101c29;
+  --color-sleet-panel-light: #203044;
+  --color-sleet-line: #64778b;
+  --color-sleet-gold: #d2ac5d;
+  --color-sleet-gold-light: #f0d48a;
+  --color-sleet-ice: #9de7ff;
+  --color-sleet-text: #edf2f6;
+  --font-display: Palatino, "Palatino Linotype", Georgia, serif;
+  --font-fight: Georgia, "Times New Roman", serif;
+  --font-ui: Verdana, Geneva, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#__nuxt {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-sleet-ink);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #ffe8a8;
+  outline-offset: 3px;
+}
+
+@layer components {
+  .sleet-panel {
+    border: 1px solid rgb(169 190 211 / 42%);
+    background: linear-gradient(145deg, rgb(31 45 60 / 94%), rgb(12 22 34 / 94%));
+    box-shadow: 0 28px 70px rgb(0 0 0 / 68%), inset 0 1px rgb(255 255 255 / 7%);
+  }
+
+  .sleet-button {
+    min-height: 42px;
+    cursor: pointer;
+    border: 1px solid #67788a;
+    background: linear-gradient(#27384a, #111c28);
+    color: #d6dee6;
+    font: 700 10px/1 var(--font-ui);
+    letter-spacing: .07em;
+  }
+
+  .sleet-button:hover:not(:disabled) {
+    border-color: var(--color-sleet-gold);
+    color: #fff;
+    filter: brightness(1.12);
+  }
+
+  .sleet-button:disabled {
+    cursor: default;
+    opacity: .38;
+  }
+
+  .sleet-button-gold {
+    border-color: #d0ad64;
+    background: linear-gradient(#a8853f, #5b421b);
+    color: #fff1bd;
+  }
+
+  .hero-portrait-skew-left {
+    transform: skewX(10deg);
+  }
+
+  .hero-portrait-skew-right {
+    transform: skewX(-10deg);
+  }
+}

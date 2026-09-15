@@ -1,0 +1,18 @@
+<!doctype html><html><meta charset="utf-8"><title>Goo original textures — browser adaptation</title><style>body{margin:0;background:#171b20;color:white;font:16px sans-serif}p{position:absolute;left:24px;top:10px}</style><p>Projéteis · texturas originais · adaptação de partículas para navegador</p><script type="module">
+import * as T from 'three';import {projectileEffects} from '../app/game/render/projectile-effects.ts';import {hitSparks} from '../app/game/render/hit-sparks.ts';
+const params=new URLSearchParams(location.search),fx=params.get('fx');
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);document.body.append(renderer.domElement);renderer.setClearColor('#171b20');renderer.toneMapping=T.ACESFilmicToneMapping;
+const scene=new T.Scene(),camera=new T.PerspectiveCamera(38,innerWidth/innerHeight,.1,100);camera.position.set(0,2.55,13.2);camera.lookAt(0,2.05,0);
+scene.add(new T.HemisphereLight(0xffffff,0x777777,3));
+if(fx==='hit'||fx==='block'){
+ const body=new T.Mesh(new T.CapsuleGeometry(.42,2.6,6,12),new T.MeshStandardMaterial({color:0x6a5344,roughness:.8}));body.position.set(0,1.85,4.15);scene.add(body);
+ const sparks=hitSparks(),spark=sparks.create(fx,{x:0,y:1.85,z:4.42},Number(params.get('face')||1),0);scene.add(spark.root);
+ const frozen=params.get('age');
+ function tick(t){requestAnimationFrame(tick);spark.update(frozen==null?t%900:Number(frozen)*1000);renderer.render(scene,camera)}requestAnimationFrame(tick);
+}else{
+ const effects=projectileEffects(),effect=effects.create(params.get('hero')||'bristleback',0);scene.add(effect.root);
+ function tick(t){requestAnimationFrame(tick);effect.update(0,1,t*.06);renderer.render(scene,camera)}requestAnimationFrame(tick);
+}
+</script></html>
+
+

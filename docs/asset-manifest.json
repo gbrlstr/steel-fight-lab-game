@@ -1,0 +1,2293 @@
+[
+  {
+    "source": "models/heroes/bristleback/bristleback.vmdl_c",
+    "export": "public\\fighters\\bristleback\\bristleback.glb",
+    "original": "imports/original/models/heroes\\bristleback\\bristleback.glb",
+    "purpose": "bristleback",
+    "bytes": 4023512,
+    "sha256": "7aae6c910781bbf859a25dae4eac7efaee43d12cf1dea1f008a83d61e81df7bb",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_color_psd_cce3d82d.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_metalnessmask_tga_63c44b29.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_specmask_tga_eebb1e07.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_normal_psd_8be653a4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_metalnessmask_tga_63c44b29_orm_1083051191.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [
+      "fighting_idle",
+      "fighting_advancing",
+      "fighting_retreating",
+      "fighting_dash_forward",
+      "fighting_dash_backward",
+      "fighting_blockstun",
+      "fighting_hitstun",
+      "fighting_block",
+      "fighting_stun",
+      "fighting_jab",
+      "fighting_cross",
+      "fighting_sweep",
+      "fighting_combo_ender",
+      "fighting_knockdown",
+      "fighting_projectile",
+      "fighting_projectile_loop",
+      "fighting_combo_ender_B",
+      "fighting_victory_start",
+      "fighting_victory",
+      "fighting_defeat_start",
+      "fighting_defeat"
+    ],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/bristleback/bristleback_back.vmdl_c",
+    "export": "public\\fighters\\bristleback\\bristleback_back.glb",
+    "original": "imports/original/models/heroes\\bristleback\\bristleback_back.glb",
+    "purpose": "bristleback",
+    "bytes": 105824,
+    "sha256": "29e755c7cf8ce93cdb950348d9b78d02cd75ba9f0609c8794d9098119a191658",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_back_color_psd_45d7aefa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_back_selfillummask_tga_49cc8713.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_back_specmask_tga_f48b9440.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_back_normal_psd_19e5192.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_back_selfillummask_tga_49cc8713_orm_3358294116.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/bristleback/bristleback_bracer.vmdl_c",
+    "export": "public\\fighters\\bristleback\\bristleback_bracer.glb",
+    "original": "imports/original/models/heroes\\bristleback\\bristleback_bracer.glb",
+    "purpose": "bristleback",
+    "bytes": 68168,
+    "sha256": "d8729a862ce71e4747b3c65a3e26195e35833ebb4c5331cf2006fd292ba52765",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_bracer_color_psd_b6459d40.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_bracer_selfillummask_tga_d9857380.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_bracer_specmask_tga_eb3a32a5.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_bracer_normal_psd_f611e3fa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_bracer_selfillummask_tga_d9857380_orm_2914419107.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/bristleback/bristleback_head.vmdl_c",
+    "export": "public\\fighters\\bristleback\\bristleback_head.glb",
+    "original": "imports/original/models/heroes\\bristleback\\bristleback_head.glb",
+    "purpose": "bristleback",
+    "bytes": 38096,
+    "sha256": "5e957cbe0e2801d3afd7985029e8cfc87cd3f819485ac97296abe4bf0929c2a3",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_head_color_psd_cddb5649.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_head_selfillummask_tga_33587e38.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_head_specmask_tga_511aa891.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_head_normal_psd_cbece9c2.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_head_selfillummask_tga_33587e38_orm_664706452.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/bristleback/bristleback_necklace.vmdl_c",
+    "export": "public\\fighters\\bristleback\\bristleback_necklace.glb",
+    "original": "imports/original/models/heroes\\bristleback\\bristleback_necklace.glb",
+    "purpose": "bristleback",
+    "bytes": 38928,
+    "sha256": "956fe82b533084f606a9a792d9b5926d0540b424ef60d035ee2b56df4019a55d",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_necklace_color_psd_f5624a68.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_necklace_metalnessmask_tga_49833dfe.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_necklace_specmask_tga_7ba684b1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_necklace_normal_psd_7e64f544.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\bristleback_necklace_metalnessmask_tga_49833dfe_orm_1807028932.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/bristleback/bristleback_weapon.vmdl_c",
+    "export": "public\\fighters\\bristleback\\bristleback_weapon.glb",
+    "original": "imports/original/models/heroes\\bristleback\\bristleback_weapon.glb",
+    "purpose": "bristleback",
+    "bytes": 52192,
+    "sha256": "5c8b961548468107d04d3adf399efbd7401d4571c83487912d032361c8bcd45a",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\bristleback\\weapon_color_psd_f9398ce4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\weapon_selfillummask_tga_f8693da3.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\weapon_specmask_tga_ebd52566.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\weapon_normal_psd_9d489cfa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\bristleback\\weapon_selfillummask_tga_f8693da3_orm_4287563604.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/dawnbreaker/dawnbreaker.vmdl_c",
+    "export": "public\\fighters\\dawnbreaker\\dawnbreaker.glb",
+    "original": "imports/original/models/heroes\\dawnbreaker\\dawnbreaker.glb",
+    "purpose": "dawnbreaker",
+    "bytes": 14062420,
+    "sha256": "81ba04d1d09e669c4d5957127e0ccea7772c8f36de36437c86c9b6aacfd843e2",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_head_color_psd_71745ce2.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_head_detailmask_psd_5a3c6cdb.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_head_specmask_psd_9b3bee52.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_head_normal_psd_1bf81bfb.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_head_detailmask_psd_5a3c6cdb_orm_560932328.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_body_color_psd_6a82fba.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_body_metalnessmask_psd_bf4e4623.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_body_specmask_psd_ef4e8bc4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_body_normal_psd_c0e4db21.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_base_body_metalnessmask_psd_bf4e4623_orm_3057492227.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [
+      "fighting_idle",
+      "fighting_advancing",
+      "fighting_retreating",
+      "fighting_jab",
+      "fighting_sweep",
+      "fighting_blockstun",
+      "fighting_knockdown",
+      "fighting_hitstun",
+      "fighting_combo_ender",
+      "fighting_block",
+      "fighting_dash_forward",
+      "fighting_dash_backward",
+      "fighting_victory",
+      "fighting_victory_start",
+      "fighting_projectile",
+      "fighting_sweep_finisher",
+      "fighting_check",
+      "fighting_starbreaker1",
+      "fighting_starbreaker2",
+      "fighting_starbreaker3",
+      "fighting_defeat_start",
+      "fighting_stun"
+    ],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/dawnbreaker/dawnbreaker_armor.vmdl_c",
+    "export": "public\\fighters\\dawnbreaker\\dawnbreaker_armor.glb",
+    "original": "imports/original/models/heroes\\dawnbreaker\\dawnbreaker_armor.glb",
+    "purpose": "dawnbreaker",
+    "bytes": 612164,
+    "sha256": "43331289bc78913046246f1a236b27c89799c394eedad0097b9bdedb14e283ca",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_armor_color_psd_b43a4605.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_armor_detailmask_psd_167b2438.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_armor_specmask_psd_73f7464d.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_armor_normal_psd_95a17a6e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_armor_detailmask_psd_167b2438_orm_553605175.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/dawnbreaker/dawnbreaker_arms.vmdl_c",
+    "export": "public\\fighters\\dawnbreaker\\dawnbreaker_arms.glb",
+    "original": "imports/original/models/heroes\\dawnbreaker\\dawnbreaker_arms.glb",
+    "purpose": "dawnbreaker",
+    "bytes": 242208,
+    "sha256": "a345e029ff49bc610b3cca4d5b68b8be3320ef82ff2abe2dc15e944790835c16",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_arm_color_psd_686645ed.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_arm_normal_psd_a2b198cc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_arm_specmask_psd_54a97b0e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_arm_detailmask_psd_ccb65f48.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_arm_detailmask_psd_ccb65f48_orm_1741931992.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/dawnbreaker/dawnbreaker_head.vmdl_c",
+    "export": "public\\fighters\\dawnbreaker\\dawnbreaker_head.glb",
+    "original": "imports/original/models/heroes\\dawnbreaker\\dawnbreaker_head.glb",
+    "purpose": "dawnbreaker",
+    "bytes": 593644,
+    "sha256": "c7be38b566b681e0255c3c3230dc15d50e820158009fb6a7a7f7fbf6ab0f2352",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_crown_color_psd_b86bd0f6.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_crown_vmat_g_tmasks1_f5699c6a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_crown_specmask_psd_90690b82.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_crown_normal_psd_5ceae887.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_crown_vmat_g_tmasks1_f5699c6a_orm_2999791807.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_hair_color_psd_1c92fa87.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_hair_detailmask_psd_8f8db630.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_hair_specmask_psd_36ade058.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_hair_normal_psd_e1a9a485.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_hair_detailmask_psd_8f8db630_orm_3657930311.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/dawnbreaker/dawnbreaker_weapon.vmdl_c",
+    "export": "public\\fighters\\dawnbreaker\\dawnbreaker_weapon.glb",
+    "original": "imports/original/models/heroes\\dawnbreaker\\dawnbreaker_weapon.glb",
+    "purpose": "dawnbreaker",
+    "bytes": 360592,
+    "sha256": "76540c18f0e9d7db9a84f075e9e2596490f1abe7b2694ec13b3a592599a1214e",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_weapon_color_psd_cb6ad3bc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_weapon_metalnessmask_psd_dda38d76.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_weapon_specmask_psd_74d49ef8.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_weapon_normal_psd_a77c9b8b.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\dawnbreaker\\dawnbreaker_weapon_metalnessmask_psd_dda38d76_orm_2965112828.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/marci/marci_back.vmdl_c",
+    "export": "public\\fighters\\marci\\marci_back.glb",
+    "original": "imports/original/models/heroes\\marci\\marci_back.glb",
+    "purpose": "marci",
+    "bytes": 402720,
+    "sha256": "eee0a6094a26a0ea3f7415e1bc8c9d9cdf42e9994c6b908c76a2ea98aad02e1d",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\marci\\marci_backpack_color_psd_d0fcfdf3.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_backpack_metalnessmask_psd_ddb5586a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_backpack_specmask_psd_f6135ca4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_backpack_normal_psd_a5368668.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_backpack_metalnessmask_psd_ddb5586a_orm_2641588171.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/marci/marci_base.vmdl_c",
+    "export": "public\\fighters\\marci\\marci_base.glb",
+    "original": "imports/original/models/heroes\\marci\\marci_base.glb",
+    "purpose": "marci",
+    "bytes": 32376688,
+    "sha256": "bfd378a039a310e637bb5151ea8c6f40be23ac952a4f97e8086823fe23a36343",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\marci\\marci_base_color_psd_38f8fa7c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_diffusemask_psd_4c34c55.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_specmask_psd_ded1d25e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_normal_psd_64dad451.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_diffusemask_psd_4c34c55_orm_1421507069.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_torso_color_psd_67ecc9bc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_torso_vmat_g_tmasks1_3fd6c990.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_torso_vmat_g_tmasks2_b0b2af2f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_torso_normal_psd_a6486006.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_torso_vmat_g_tmasks1_3fd6c990_orm_1182486223.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_head_color_psd_e7041c1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_head_selfillummask_psd_86ca0dcc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_head_specmask_psd_7904daa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_head_normal_psd_d0968e0e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_head_selfillummask_psd_86ca0dcc_orm_2594375665.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_eyeshadow_trans_psd_251474ca.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_eye_shadow_vmat_g_tnormal_5a28bd86.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\drumstick_color_psd_64bfb496.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\drumstick_vmat_g_tmasks1_a57d02bf.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\drumstick_specmask_psd_a9135912.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\drumstick_normal_psd_df978334.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\drumstick_vmat_g_tmasks1_a57d02bf_orm_2420034794.png",
+        "exists": true
+      }
+    ],
+    "skins": 2,
+    "fightingAnimations": [
+      "fighting_idle",
+      "fighting_blockstun",
+      "fighting_block",
+      "fighting_stun",
+      "fighting_hitstun",
+      "fighting_jab",
+      "fighting_cross",
+      "fighting_sweep",
+      "fighting_sweep_kick1",
+      "fighting_sweep_kick2",
+      "fighting_combo_ender",
+      "fighting_knockdown",
+      "fighting_advancing",
+      "fighting_retreating",
+      "fighting_dash_forward",
+      "fighting_dash_backward",
+      "fighting_victory_start",
+      "fighting_victory",
+      "fighting_defeat_start",
+      "fighting_defeat",
+      "fighting_projectile",
+      "fighting_dash_elbow_start",
+      "fighting_dash_elbow_end",
+      "fighting_cast_unleash",
+      "fighting_idle_unleash",
+      "fighting_advancing_unleash",
+      "fighting_retreating_unleash"
+    ],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/marci/marci_costume.vmdl_c",
+    "export": "public\\fighters\\marci\\marci_costume.glb",
+    "original": "imports/original/models/heroes\\marci\\marci_costume.glb",
+    "purpose": "marci",
+    "bytes": 1849304,
+    "sha256": "e405c58615c0fe1e61ca5f630ebd5996885cfa666db8ecd163edd5e5b0de7cb5",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\marci\\marci_armor_color_psd_2f71e927.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_armor_metalnessmask_psd_9590168.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_armor_specmask_psd_62ed5639.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_armor_normal_psd_39735504.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_armor_metalnessmask_psd_9590168_orm_1444825258.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_color_psd_38f8fa7c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_diffusemask_psd_4c34c55.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_specmask_psd_ded1d25e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_normal_psd_64dad451.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_base_diffusemask_psd_4c34c55_orm_1421507069.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/marci/marci_head.vmdl_c",
+    "export": "public\\fighters\\marci\\marci_head.glb",
+    "original": "imports/original/models/heroes\\marci\\marci_head.glb",
+    "purpose": "marci",
+    "bytes": 764580,
+    "sha256": "ab9bfb07a8c26bdcd7e01796b6381434f82efb20daf66ae1675699dce364d9f9",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\marci\\marci_hair_color_psd_112a3654.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_hair_vmat_g_tmasks1_9d69bb80.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_hair_specmask_psd_34b083d8.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_hair_normal_psd_c3d02c4e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_hair_vmat_g_tmasks1_9d69bb80_orm_2249759241.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/marci/marci_shoulders.vmdl_c",
+    "export": "public\\fighters\\marci\\marci_shoulders.glb",
+    "original": "imports/original/models/heroes\\marci\\marci_shoulders.glb",
+    "purpose": "marci",
+    "bytes": 218728,
+    "sha256": "fbe9a42c5582e588aa5938c9fe5f17fb908ba9aa23befaf3371ce7ca560817bb",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\marci\\marci_cape_color_psd_9305ac46.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_cape_vmat_g_tmasks1_3fd6c990.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_cape_specmask_psd_c634ee5c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_cape_normal_psd_e6e631fe.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\marci\\marci_cape_vmat_g_tmasks1_3fd6c990_orm_3389207341.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana.vmdl_c",
+    "export": "public\\fighters\\shendelzare\\vengeful_spirit_arcana.glb",
+    "original": "imports/original/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana.glb",
+    "purpose": "shendelzare",
+    "bytes": 35418940,
+    "sha256": "21a5c5eb28bafe86657a47b5c453c320e23aab5a65f841bff633cb3c9537b6d7",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_head_color_psd_ca029c53.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_head_detailmask_psd_fd5b59bc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_head_specmask_psd_774bac6a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_head_normal_tga_8faf8bfa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_head_detailmask_psd_fd5b59bc_orm_1317153944.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_new_color_psd_9960d66f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_detailmask_tga_a90d9d4a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_specmask_psd_9c8c37c9.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_normal_psd_daffd074.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_base_detailmask_tga_a90d9d4a_orm_557380067.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [
+      "fighting_idle",
+      "fighting_jab",
+      "fighting_cross",
+      "fighting_retreating",
+      "fighting_advancing",
+      "fighting_combo_ender",
+      "fighting_dash_forward",
+      "fighting_dash_backward",
+      "fighting_block",
+      "fighting_knockdown",
+      "fighting_blockstun",
+      "fighting_hitstun",
+      "fighting_victory_start",
+      "fighting_projectile",
+      "fighting_victory",
+      "fighting_sweep",
+      "fighting_netherswap_end",
+      "fighting_netherswap_start",
+      "fighting_defeat",
+      "fighting_defeat_start"
+    ],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head.vmdl_c",
+    "export": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head.glb",
+    "original": "imports/original/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head.glb",
+    "purpose": "shendelzare",
+    "bytes": 2897052,
+    "sha256": "c1a196234d67a76a578fdf0af15005e18e01c261fedd49b5a9f45221fe7d7a90",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head2_color_psd_d20a242b.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_detailmask_tga_63a10d8f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_specmask_psd_2f049916.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_normal_psd_55772f7c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_detailmask_tga_63a10d8f_orm_3055466735.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_alt_color_psd_e7c51cd0.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_alt_detailmask_psd_5f446e07.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_specmask_psd_52c83312.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_alt_detailmask_psd_5f446e07_orm_3776239447.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_color_psd_c0e3c07a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_detailmask_psd_4912ea2d.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_specmask_psd_7e2ff558.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_normal_psd_76f94bb1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_detailmask_psd_4912ea2d_orm_4083063598.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_color_psd_5dd5b57a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_detailmask_tga_777755fa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_specmask_psd_71524886.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_normal_psd_41c2e95e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_detailmask_tga_777755fa_orm_3311350775.png",
+        "exists": true
+      }
+    ],
+    "skins": 4,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head_refit.vmdl_c",
+    "export": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_refit.glb",
+    "original": "imports/original/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head_refit.glb",
+    "purpose": "shendelzare",
+    "bytes": 2899232,
+    "sha256": "61ab9e3d5f25b881e06f9cf6fb54bf11eeb1d822894edd4db976604a5284a00f",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head2_color_psd_d20a242b.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_detailmask_tga_63a10d8f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_specmask_psd_2f049916.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_normal_psd_55772f7c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_detailmask_tga_63a10d8f_orm_3055466735.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_alt_color_psd_e7c51cd0.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_alt_detailmask_psd_5f446e07.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_specmask_psd_52c83312.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_head_alt_detailmask_psd_5f446e07_orm_3776239447.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_color_psd_c0e3c07a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_detailmask_psd_4912ea2d.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_specmask_psd_7e2ff558.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_normal_psd_76f94bb1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_head_detailmask_psd_4912ea2d_orm_4083063598.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_color_psd_5dd5b57a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_detailmask_tga_777755fa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_specmask_psd_71524886.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_normal_psd_41c2e95e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_detailmask_tga_777755fa_orm_3311350775.png",
+        "exists": true
+      }
+    ],
+    "skins": 4,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs.vmdl_c",
+    "export": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs.glb",
+    "original": "imports/original/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs.glb",
+    "purpose": "shendelzare",
+    "bytes": 3170536,
+    "sha256": "6bfcfeac4c71f7b5ca326370dc140217dbbeec5a42e5948abdf0b9d908c979c3",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_color_psd_9167b69e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_detailmask_psd_d0a31807.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_specmask_psd_4f89152c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_normal_psd_713b9d44.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_detailmask_psd_d0a31807_orm_798769939.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_alt_color_psd_7304171e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_alt_detailmask_tga_80a23c23.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_specmask_psd_c37a28f9.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_alt_detailmask_tga_80a23c23_orm_586244024.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_color_psd_6fa22641.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_detailmask_tga_77fce064.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_specmask_psd_852bf6c6.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_normal_psd_4bdc2e36.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_detailmask_tga_77fce064_orm_1726773088.png",
+        "exists": true
+      }
+    ],
+    "skins": 4,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs_refit.vmdl_c",
+    "export": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_refit.glb",
+    "original": "imports/original/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs_refit.glb",
+    "purpose": "shendelzare",
+    "bytes": 3177044,
+    "sha256": "4dd67756180d1d68320899ac30d5ded4d3865a249ecd2c0b31c3c34f2a14173c",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_color_psd_9167b69e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_detailmask_psd_d0a31807.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_specmask_psd_4f89152c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_normal_psd_713b9d44.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_detailmask_psd_d0a31807_orm_798769939.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_alt_color_psd_7304171e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_alt_detailmask_tga_80a23c23.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_specmask_psd_c37a28f9.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_legs_alt_detailmask_tga_80a23c23_orm_586244024.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_color_psd_6fa22641.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_detailmask_tga_77fce064.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_specmask_psd_852bf6c6.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_normal_psd_4bdc2e36.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_legs_detailmask_tga_77fce064_orm_1726773088.png",
+        "exists": true
+      }
+    ],
+    "skins": 4,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_shoulders.vmdl_c",
+    "export": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders.glb",
+    "original": "imports/original/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_shoulders.glb",
+    "purpose": "shendelzare",
+    "bytes": 8802444,
+    "sha256": "585c7ee8c4f14b3694efce62783144273ff1a97f893597844964936c45b43a61",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_color_psd_911aaeae.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_detailmask_tga_f66265fc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_specmask_psd_e723efe1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_normal_psd_ce5a9358.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_detailmask_tga_f66265fc_orm_596340128.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_new_color_psd_eba8cb37.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_new_detailmask_psd_869cc1cc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_new_specmask_psd_7ac87035.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_normal_tga_85dff7f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_new_detailmask_psd_869cc1cc_orm_2833908089.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_alt_color_psd_bedc4c22.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_alt_detailmask_tga_54b404c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_specmask_psd_b025d3de.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_shoulders_alt_detailmask_tga_54b404c_orm_4209997291.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_alt_color_psd_4ba32eb3.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_alt_detailmask_psd_2808212a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_alt_specmask_psd_bc52361f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_alt_normal_tga_98d09043.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_wings_alt_detailmask_psd_2808212a_orm_4227534988.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_color_psd_5dd5b57a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_detailmask_tga_777755fa.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_specmask_psd_71524886.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_normal_psd_41c2e95e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_shoulders_detailmask_tga_777755fa_orm_3311350775.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_wings_color_psd_fce4aec0.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_wings_detailmask_psd_ad74f953.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_wings_specmask_psd_5dcb66ab.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_wings_normal_tga_a41861be.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_wings_detailmask_psd_ad74f953_orm_2967496654.png",
+        "exists": true
+      }
+    ],
+    "skins": 4,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon.vmdl_c",
+    "export": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon.glb",
+    "original": "imports/original/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon.glb",
+    "purpose": "shendelzare",
+    "bytes": 1070260,
+    "sha256": "318d501026f0b78b33c240ee6d47c0ba1b8a23497f2020dfa9ee3ac0813d38ef",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon2_color_psd_319aa5ce.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_detailmask_tga_5a1ee6ef.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_specmask_tga_4868a2d1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_normal_tga_5c618308.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_detailmask_tga_5a1ee6ef_orm_3419748898.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_alt_color_psd_c726165.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_alt_detailmask_tga_a2faba70.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_alt_specmask_tga_66a5db43.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_alt_normal_tga_51691c0c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\vengeful_spirit_arcana_weapon_alt_detailmask_tga_a2faba70_orm_1179741394.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_weapon_color_psd_f058e0c9.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_weapon_detailmask_tga_4ef2fed3.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_weapon_specmask_psd_3e3b730c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_weapon_normal_tga_2de73b2f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\shendelzare\\imperia_weapon_detailmask_tga_4ef2fed3_orm_501425812.png",
+        "exists": true
+      }
+    ],
+    "skins": 4,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tuskarr.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tuskarr.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tuskarr.glb",
+    "purpose": "tuskarr",
+    "bytes": 3913640,
+    "sha256": "1739cb40af39565718a128083b666aba0b458214ebfb5c0a1440e01802293465",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_base_color_psd_3f204cbb.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_base_metalnessmask_tga_891dcbf4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_base_specmask_tga_856d75e2.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_base_normal_psd_397ae16b.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_base_metalnessmask_tga_891dcbf4_orm_205461666.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [
+      "fighting_idle",
+      "fighting_blockstun",
+      "fighting_block",
+      "fighting_stun",
+      "fighting_hitstun",
+      "fighting_jab",
+      "fighting_cross",
+      "fighting_sweep",
+      "fighting_knockdown",
+      "fighting_advancing",
+      "fighting_retreating",
+      "fighting_combo_ender",
+      "fighting_dash_forward",
+      "fighting_dash_backward",
+      "fighting_walrus_punch",
+      "fighting_walrus_kick",
+      "fighting_projectile",
+      "fighting_victory_start",
+      "fighting_victory",
+      "fighting_defeat",
+      "fighting_defeat_start"
+    ],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tusk_armor_glove.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tusk_armor_glove.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tusk_armor_glove.glb",
+    "purpose": "tuskarr",
+    "bytes": 46472,
+    "sha256": "437ab5ca78456d1cb123ded8ca1d44902a03b1b4f58a4512f122c406f650d496",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_armor_glove_color_psd_1fe32aae.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_armor_glove_metalnessmask_tga_f67c0705.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_armor_glove_specmask_tga_8b9fb202.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_armor_glove_normal_psd_8084a59c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_armor_glove_metalnessmask_tga_f67c0705_orm_824336756.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tusk_cowl.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tusk_cowl.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tusk_cowl.glb",
+    "purpose": "tuskarr",
+    "bytes": 65872,
+    "sha256": "ab583c43f3c4e2edf0b9ab8130ee6c8bc7e90bf7fce1db214f83644d64aaffe3",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_cowl_color_psd_fc2453b9.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_cowl_metalnessmask_tga_e2b4110f.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_cowl_specmask_tga_86e1a1b9.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_cowl_normal_psd_647a9aab.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_cowl_metalnessmask_tga_e2b4110f_orm_3428685388.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tusk_fish.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tusk_fish.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tusk_fish.glb",
+    "purpose": "tuskarr",
+    "bytes": 14444,
+    "sha256": "99540804c518b5e79ddfe896af69e16fbd9e68508c71dfb38c702b2a96333568",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_fish_color_psd_a3899d04.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_fish_normal_psd_877d48e8.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tusk_fish_basket.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tusk_fish_basket.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tusk_fish_basket.glb",
+    "purpose": "tuskarr",
+    "bytes": 55420,
+    "sha256": "b5a0801c0625c7ddb7a71aa7313e92e67b2912360fd494479ba34d0f060f79f2",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_basket_color_psd_8ea019b0.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_basket_metalnessmask_tga_34ce0ed8.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_basket_specmask_tga_9b3d0fae.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_basket_normal_psd_208a8fb6.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_basket_metalnessmask_tga_34ce0ed8_orm_1618975441.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tusk_hat.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tusk_hat.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tusk_hat.glb",
+    "purpose": "tuskarr",
+    "bytes": 42160,
+    "sha256": "c5996fa3ed91f3170fa8cb94b27c9465479069c70f1c62549e9a4e09862de850",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_hat_color_psd_c5064d12.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_hat_metalnessmask_tga_2151557e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_hat_specmask_tga_92e40019.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_hat_normal_psd_7df9fb8a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_hat_metalnessmask_tga_2151557e_orm_3562641169.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tusk_horns.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tusk_horns.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tusk_horns.glb",
+    "purpose": "tuskarr",
+    "bytes": 29360,
+    "sha256": "625712fff9345de6f77c29e75be5e4eebfb6c81225fedbc477be7e9561a5b333",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_horns_color_psd_555eacc4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_horns_metalnessmask_tga_c388ee9c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_horns_specmask_tga_a0d3b5ba.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_horns_normal_psd_38485571.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_horns_metalnessmask_tga_c388ee9c_orm_2953292971.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/tuskarr/tusk_weapon.vmdl_c",
+    "export": "public\\fighters\\tuskarr\\tusk_weapon.glb",
+    "original": "imports/original/models/heroes\\tuskarr\\tusk_weapon.glb",
+    "purpose": "tuskarr",
+    "bytes": 48372,
+    "sha256": "fe501232baeddaf12f14f43e7df8a8c4061b9cc62f43936b7f1bec0ed9a3ca49",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_weapon_color_psd_a08273e3.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_weapon_metalnessmask_tga_7d1967d4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_weapon_specmask_tga_544297a7.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_weapon_normal_psd_9ccb8214.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\tuskarr\\tusk_weapon_metalnessmask_tga_7d1967d4_orm_4045342265.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/vengeful/vengeful.vmdl_c",
+    "export": "public\\fighters\\vengeful\\vengeful.glb",
+    "original": "imports/original/models/heroes\\vengeful\\vengeful.glb",
+    "purpose": "vengeful",
+    "bytes": 1276912,
+    "sha256": "d8eeafd1844f06cd32c9e340d75439455b6f89cbb4126cae64e3e2ecc4faa277",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_body_color_psd_e9d0cec4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_body_detailmask_tga_e38ea0fb.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_body_specmask_tga_ce2ea73e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_body_normal_psd_67377a8.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_body_detailmask_tga_e38ea0fb_orm_1978185810.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/vengeful/vengeful_hair.vmdl_c",
+    "export": "public\\fighters\\vengeful\\vengeful_hair.glb",
+    "original": "imports/original/models/heroes\\vengeful\\vengeful_hair.glb",
+    "purpose": "vengeful",
+    "bytes": 74544,
+    "sha256": "93fa29bcba0160139043f79a565677268ef9f1a50e5720d18e81b0eb12273aad",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_head_color_psd_551d159d.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_head_detailmask_tga_6af7d927.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_head_specmask_tga_4e482d7d.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_head_normal_psd_e057b8c2.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_head_detailmask_tga_6af7d927_orm_3962466714.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/vengeful/vengeful_lowerbody.vmdl_c",
+    "export": "public\\fighters\\vengeful\\vengeful_lowerbody.glb",
+    "original": "imports/original/models/heroes\\vengeful\\vengeful_lowerbody.glb",
+    "purpose": "vengeful",
+    "bytes": 66104,
+    "sha256": "858d27447d329adef09b7cc4cd367c0263206863aeaf1613a7d5ee2c90135c15",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_legs_color_psd_c8b1fa3.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_legs_diffusemask_tga_d91014f0.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_legs_specmask_tga_849febcc.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_legs_normal_psd_3e9691c9.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_legs_diffusemask_tga_d91014f0_orm_1503050756.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/vengeful/vengeful_upperbody.vmdl_c",
+    "export": "public\\fighters\\vengeful\\vengeful_upperbody.glb",
+    "original": "imports/original/models/heroes\\vengeful\\vengeful_upperbody.glb",
+    "purpose": "vengeful",
+    "bytes": 111160,
+    "sha256": "1371b73cd935b099a51c8970e7a00c9a9f7e8e4999158358f6b09928b28f4677",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_shoulder_color_psd_db966c7b.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_shoulder_detailmask_tga_e398634e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_shoulder_specmask_tga_e3ec2ae4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_shoulder_normal_psd_9914ccf.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_shoulder_detailmask_tga_e398634e_orm_2756437063.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/heroes/vengeful/vengeful_weapon.vmdl_c",
+    "export": "public\\fighters\\vengeful\\vengeful_weapon.glb",
+    "original": "imports/original/models/heroes\\vengeful\\vengeful_weapon.glb",
+    "purpose": "vengeful",
+    "bytes": 37092,
+    "sha256": "6afaf4b4d9a2cb84a9011d95356e8c7598afe9fea59121195e7cd373c24427c1",
+    "dependencies": [
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_weapon_color_psd_78dc0572.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_weapon_selfillummask_tga_fb192b54.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_weapon_specmask_tga_4032b625.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_weapon_normal_tga_d69cb93e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\fighters\\vengeful\\vengeful_spirit_weapon_selfillummask_tga_fb192b54_orm_2851080732.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "maps/scenes/crownfall/arena.vpk (export preexistente; origem interna a validar)",
+    "export": "public\\arena\\arena-scene.glb",
+    "original": "src/assets/maps/scenes/crownfall/arena.glb",
+    "purpose": "arena",
+    "bytes": 9561320,
+    "sha256": "71b3a8e3071aeaa89f90f0ca626e821e677887fffd15ae5991e49d6110c955b3",
+    "dependencies": [
+      {
+        "path": "public\\arena\\primary_black_color_tga_641d9241.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\default_normal_tga_7652cb.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\default_normal_tga_b3f4ec4c_orm_3598707198.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\primary_white_color_tga_f468dad0.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tusktown01_color_psd_635a9d3a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tusktown01_normal_psd_63872813.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tusktown01_refl_psd_5ad0056e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\whiskey_the_stout_penguin_color_psd_dbdcfe36.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\whiskey_the_stout_penguin_specmask_tga_76ec1605.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\whiskey_the_stout_penguin_normal_psd_15a9ed51.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_01_color_psd_f36f7d50.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_02_color_psd_ccbd0227.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_03_color_psd_d1c811b1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_04_color_psd_8f5a993a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_05_color_psd_258998ad.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_06_color_psd_4bf5934a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_lantern_glass_vmat_g_tcolor_52352dff.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuskfolk001_f_color_psd_e8e4a857.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\tuskfolk001_f_metalnessmask_psd_a680ae73.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\tuskfolk001_f_specmask_psd_d7cdee27.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\tuskfolk001_f_normal_psd_2bcbdc5.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\tuskfolk001_f_metalnessmask_psd_a680ae73_orm_3832232916.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\crystal_maiden_diffusemask_tga_42f1c72a.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\crystal_maiden_specmask_tga_74f28c31.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\crystal_maiden_normal_psd_a7c3c26e.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\crystal_maiden_color_psd_764d83fe.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\crystal_maiden_diffusemask_tga_42f1c72a_orm_2678740083.png",
+        "exists": false
+      },
+      {
+        "path": "public\\arena\\gray_50_color_tga_edb828f6.png",
+        "exists": true
+      }
+    ],
+    "skins": 5,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\events\\frostivus\\penguin\\penguin_alt.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\events\\frostivus\\penguin\\penguin_alt.glb",
+    "purpose": "arena",
+    "bytes": 454800,
+    "sha256": "7d6c06199df1b14cee271d74896792c9599ba607d59e452c13421ecd7d1f62bc",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\events\\frostivus\\penguin\\whiskey_the_stout_penguin_color_psd_dbdcfe36.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\events\\frostivus\\penguin\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\events\\frostivus\\penguin\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\events\\frostivus\\penguin\\whiskey_the_stout_penguin_specmask_tga_76ec1605.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\events\\frostivus\\penguin\\whiskey_the_stout_penguin_normal_psd_15a9ed51.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\events\\frostivus\\penguin\\diffusewarp_diffusewarp_psd_b1607356.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\bristleback\\bristleback.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\bristleback\\bristleback.glb",
+    "purpose": "arena",
+    "bytes": 2029004,
+    "sha256": "2d9e898a18d8888528a4fce15fd6c08d282a291ce591b714ff7dd78dde12a6fd",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\bristleback\\bristleback_color_psd_cce3d82d.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\bristleback\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\bristleback\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\bristleback\\bristleback_metalnessmask_tga_63c44b29.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\bristleback\\bristleback_specmask_tga_eebb1e07.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\bristleback\\bristleback_normal_psd_8be653a4.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\lich\\lich.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\lich\\lich.glb",
+    "purpose": "arena",
+    "bytes": 1817040,
+    "sha256": "5a47b15f3a10eb92e22d4c4d68e7557f039ce0c41c542f61b72242a940cc9a4a",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_base_color_psd_2c2b6fd7.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_base_detailmask_tga_6d54586c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_base_specmask_tga_43f2ad2a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_base_normal_psd_ed34c678.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_diffusewarp_psd_377527d8.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\lich\\lich_bracer.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\lich\\lich_bracer.glb",
+    "purpose": "arena",
+    "bytes": 18696,
+    "sha256": "1c9e1f2486bdb91f669a87ffe27f8212d2ca9467cc68e6ec7b568d90f085fe11",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_bracer_color_psd_f20c811c.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_bracer_detailmask_tga_60949038.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_bracer_specmask_tga_74295d98.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_bracer_normal_psd_f684b9a7.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_diffusewarp_psd_377527d8.png",
+        "exists": true
+      }
+    ],
+    "skins": 0,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\lich\\lich_dress.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\lich\\lich_dress.glb",
+    "purpose": "arena",
+    "bytes": 79504,
+    "sha256": "3f66e761bdc56ca7f4cbc723326785dd880ca949b88d2344a3575c3b8ece6965",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_dress_color_psd_6024c2ae.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_dress_detailmask_tga_c67fcf45.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_dress_specmask_tga_ef9a2977.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_dress_normal_psd_cbc31d8.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_diffusewarp_psd_377527d8.png",
+        "exists": true
+      }
+    ],
+    "skins": 0,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\lich\\lich_horns.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\lich\\lich_horns.glb",
+    "purpose": "arena",
+    "bytes": 36556,
+    "sha256": "c5a85d79de22a913df13a9bc9b55e5bc73259a2ba6fce4e41fec2a084762866a",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_horn_color_psd_215c2ee1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_horn_metalnessmask_tga_2f289233.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_horn_specmask_tga_7af4c3e5.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_horn_normal_psd_9b72aa00.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_diffusewarp_psd_377527d8.png",
+        "exists": true
+      }
+    ],
+    "skins": 0,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\lich\\lich_neck_rock.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\lich\\lich_neck_rock.glb",
+    "purpose": "arena",
+    "bytes": 116472,
+    "sha256": "e259bb26ed476276bef52077345b731d97fa4a74370f516e82c78bf442a1d513",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_neck_rock_color_psd_c10a7438.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_neck_rock_detailmask_tga_1714f15b.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_neck_rock_specmask_tga_4af08766.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_neck_rock_normal_psd_5c8774de.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\lich\\lich_diffusewarp_psd_377527d8.png",
+        "exists": true
+      }
+    ],
+    "skins": 0,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\tuskarr\\tuskarr.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\tuskarr\\tuskarr.glb",
+    "purpose": "arena",
+    "bytes": 2088956,
+    "sha256": "5aa2578da731fa00a53f6b32c474ddb1030451605685a8a0b30e09cb4a14b5d1",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\tuskarr\\tusk_base_color_psd_3f204cbb.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\tuskarr\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\tuskarr\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\tuskarr\\tusk_base_metalnessmask_tga_891dcbf4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\tuskarr\\tusk_base_specmask_tga_856d75e2.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\tuskarr\\tusk_base_normal_psd_397ae16b.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\tuskarr\\diffusewarp_diffusewarp_psd_b1607356.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\crowd\\models\\heroes\\vengeful\\vengeful.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\crowd\\models\\heroes\\vengeful\\vengeful.glb",
+    "purpose": "arena",
+    "bytes": 1459880,
+    "sha256": "5cf07686972a3f704cc56565b9a881c9560b76c0c7273d510fe169dbc120f6ac",
+    "dependencies": [
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\vengeful_spirit_body_color_psd_e9d0cec4.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\vengeful_spirit_body_detailmask_tga_e38ea0fb.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\vengeful_spirit_glow_detail_psd_faf63d81.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\default_detail2_tga_70788555.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\default_fresnelwarprim_tga_d9279d65.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\vengeful_spirit_body_specmask_tga_ce2ea73e.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\vengeful_spirit_body_normal_psd_67377a8.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\crowd\\models\\heroes\\vengeful\\vengeful_spirit_diffusewarp_psd_d3058784.png",
+        "exists": true
+      }
+    ],
+    "skins": 1,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  },
+  {
+    "source": "models/events/crownfall/tussle_stage/minifight_tavern.vmdl_c",
+    "export": "public\\arena\\minifight_tavern.glb",
+    "original": "imports/original/models/events/crownfall/tussle_stage\\minifight_tavern.glb",
+    "purpose": "arena",
+    "bytes": 7053812,
+    "sha256": "5271db3d6db548e4589e3ba1caf9f897a972eda0b71684c2199402a81d52a0b6",
+    "dependencies": [
+      {
+        "path": "public\\arena\\tuss_tav_01_color_psd_f36f7d50.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_02_color_psd_ccbd0227.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_03_color_psd_d1c811b1.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_04_color_psd_8f5a993a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_05_color_psd_258998ad.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_06_color_psd_4bf5934a.png",
+        "exists": true
+      },
+      {
+        "path": "public\\arena\\tuss_tav_lantern_glass_vmat_g_tcolor_52352dff.png",
+        "exists": true
+      }
+    ],
+    "skins": 0,
+    "fightingAnimations": [],
+    "validation": "GLB parsed and texture existence checked; visual motion validation separate"
+  }
+]
