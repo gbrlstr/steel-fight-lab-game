@@ -173,7 +173,7 @@ This project does **not** claim full equivalence to official Sleet Fighter. Read
 | Repository | Role |
 | --- | --- |
 | **[steel-fight-lab-game](https://github.com/gbrlstr/steel-fight-lab-game)** (this) | Nuxt client + render + prediction |
-| **sleet-fighter-server** | Authoritative NestJS backend |
+| **[sleet-fighter-server](https://github.com/gbrlstr/steel-fight-lab-server)** | Authoritative NestJS backend |
 
 ---
 
