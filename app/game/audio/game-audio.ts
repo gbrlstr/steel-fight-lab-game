@@ -145,6 +145,8 @@ function stopMusic(seconds=0){
  },seconds*1000/steps)
 }
 
+function wait(ms:number){return new Promise<void>(done=>window.setTimeout(done,ms))}
+
 const quiet=new Set(['IDLE_ACTION_DEFINITION','BLOCKSTUN_ACTION_DEFINITION','HITSTUN_ACTION_DEFINITION','GUARDBREAK_ACTION_DEFINITION','DASH_ACTION_DEFINITION','BACKDASH_ACTION_DEFINITION','VICTORY_ACTION_DEFINITION','DEFEAT_ACTION_DEFINITION'])
 
 export const sfx={
@@ -199,6 +201,9 @@ export const sfx={
   return (async()=>{
    onPhase?.('round')
    await speak(finalRound?'vo/announcer_dota_fighter/dota_fighter_round_final':'vo/announcer_dota_fighter/dota_fighter_round_01')
+   if(gen!==lineGen)return
+   // Hold on ROUND so fighters can walk into position before the go signal.
+   await wait(1600)
    if(gen!==lineGen)return
    named('weapons/hero/techies/suicide',.35)
    onPhase?.('fight')

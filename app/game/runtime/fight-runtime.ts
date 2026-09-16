@@ -11,7 +11,7 @@ import { portrait } from '../shared/assets'
 import { acquireFighter, fighterStocked, FIGHTER_PRESENCE, loadFighter, releaseFighter } from '../render/fighters'
 import { hitboxDebug } from '../render/hitbox-debug'
 import { FX_LAYER, heroOutline, tagFx, tagHero } from '../render/hero-outline'
-import { initial, step, roster, RULES } from '../shared/combat'
+import { initial, step, roster, RULES, fighter } from '../shared/combat'
 const mix = (a: number, b: number, t: number) => Math.round(a + (b - a) * t)
 const hpPaint = (t: number) => {
     const c = (g: number[], r: number[]) => `rgb(${mix(r[0], g[0], t)},${mix(r[1], g[1], t)},${mix(r[2], g[2], t)})`
@@ -169,8 +169,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     }
     function roundLabel(finalRound: boolean) {
         if (finalRound) return 'FINAL ROUND'
-        const next = state.pause > 0 ? state.round + 1 : state.round
-        return `ROUND ${next}`
+        return `ROUND ${state.round}`
     }
     function showRoundCall(phase: 'round' | 'fight', finalRound: boolean) {
         const panel = app.querySelector<HTMLElement>('#roundcall')
@@ -195,6 +194,18 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
             if (disposed) return
             showRoundCall(phase, finalRound)
         }
+    }
+    /** Snap fighters to corners for the next round while combat stays locked (move-only). */
+    function beginNextRound() {
+        if (state.pause <= 0 && state.remaining === RULES.roundFrames) return
+        if (state.pause > 0) state.round++
+        state.pause = 0
+        state.remaining = RULES.roundFrames
+        state.fighters = state.fighters.map((f, i) => fighter(f.hero, i ? 600 : -600, i ? -1 : 1))
+        state.projectiles = []
+        state.events = []
+        lastAction[0] = lastAction[1] = ''
+        prevPause = 0
     }
     function rematchLocal() {
         if (network || disposed) return
@@ -224,7 +235,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         projectiles.clear()
         void fighters()
     }
-    function release() { if (disposed) return; engaged = true; hideVersus(); hideRoundCall(); if (state.pause > 0) state.pause = 1 }
+    function release() { if (disposed) return; beginNextRound(); engaged = true; hideVersus(); hideRoundCall() }
     function cues() {
         state.fighters.forEach((f, i) => {
             if (f.action === lastAction[i]) return
@@ -269,7 +280,17 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
             }
         })
         if (!introPlayed && loaded) { introPlayed = true; engaged = false; hideVictory(); hideRoundCall(); showVersus(); sfx.intro(state.fighters[0].hero, state.fighters[1].hero, release, onRoundPhase(false)) }
-        if (prevPause === 0 && state.pause > 0 && state.winner === null) { engaged = false; hideVersus(); const finalRound = state.score.some(n => n >= RULES.wins - 1); void sfx.roundOver(state.fighters.every(f => f.hp > 0)).then(() => sfx.roundCall(finalRound, onRoundPhase(finalRound))).then(release) }
+        if (prevPause === 0 && state.pause > 0 && state.winner === null) {
+            engaged = false
+            hideVersus()
+            const finalRound = state.score.some(n => n >= RULES.wins - 1)
+            void sfx.roundOver(state.fighters.every(f => f.hp > 0)).then(() => {
+                if (disposed) return
+                // Corners first so ROUND / settle window is for positioning, not victory poses.
+                beginNextRound()
+                return sfx.roundCall(finalRound, onRoundPhase(finalRound))
+            }).then(() => { if (!disposed) release() })
+        }
         if (state.winner !== null && !matchCalled) { matchCalled = true; hideVersus(); hideRoundCall(); showVictory(state.winner); sfx.matchOver() }
         prevPause = state.pause
     }
