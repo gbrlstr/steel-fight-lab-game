@@ -120,14 +120,20 @@ Public Nuxt / environment variables:
 | `NUXT_PUBLIC_API_URL` | `http://127.0.0.1:3010` | HTTP API (room list, health) |
 | `NUXT_PUBLIC_GITHUB_URL` | `https://github.com/gbrlstr/steel-fight-lab-game` | Title-screen GitHub banner link |
 
-**Production (Vercel):** the frontend alone cannot host rooms. Deploy **sleet-fighter-server** somewhere with a public HTTPS/WSS URL (Railway, Render, Fly, VPS…), then set both env vars in the Vercel project **before build**:
+**Production (Vercel client):** the frontend alone cannot host rooms. Deploy **sleet-fighter-server** on a **always-on** host with WebSockets (**Railway / Render / Fly / VPS** — not Vercel). Then set both env vars in the Vercel project **before build**:
 
 ```bash
-NUXT_PUBLIC_API_URL=https://your-server.example.com
-NUXT_PUBLIC_WS_URL=wss://your-server.example.com
+NUXT_PUBLIC_API_URL=https://your-server.up.railway.app
+NUXT_PUBLIC_WS_URL=wss://your-server.up.railway.app
 ```
 
-If these stay on `127.0.0.1`, OPEN ROOMS stays empty and Create/Join cannot reach the backend.
+Same host/port is fine: the Nest process serves `/rooms` (HTTP) and upgrades WebSocket on the same origin. If these stay on `127.0.0.1` or a Vercel “server” URL, OPEN ROOMS stays empty and Create/Join cannot reach the backend.
+
+### Deploy server (Railway example)
+
+1. New Railway project → deploy `sleet-fighter-server` (build: `npm run build`, start: `npm run start:prod`)
+2. Do **not** set `HTTP_PORT` on Railway (it uses the single `PORT` Railway injects)
+3. Copy the public HTTPS URL into the client env vars above and redeploy Vercel
 
 In `nuxt.config.ts`:
 
