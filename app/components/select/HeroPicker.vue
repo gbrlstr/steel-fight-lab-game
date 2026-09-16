@@ -133,11 +133,15 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
   position: absolute;
   top: 39%;
   left: 50%;
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(5, clamp(64px, 8.9vw, 94px));
+  grid-auto-rows: clamp(102px, 14.13vw, 149px);
+  align-items: end;
   justify-content: center;
   gap: clamp(5px, .75vw, 9px);
-  width: min(570px, 80vw);
+  width: max-content;
+  max-width: 80vw;
+  padding-bottom: 22px;
   transform: translateX(-50%);
   pointer-events: auto;
   animation: reveal-up 430ms 100ms ease-out both;
@@ -181,6 +185,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
 
 .confirm-picker {
   position: relative;
+  display: grid;
+  place-items: center;
   width: clamp(190px, 21vw, 226px);
   height: 67px;
   padding: 0;
@@ -208,17 +214,18 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
 }
 
 .confirm-picker span {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 3;
-  display: grid;
-  place-items: center;
-  transform: translateY(-1px);
+  display: block;
+  width: 100%;
   color: #fff;
   font-family: Verdana, Geneva, sans-serif;
-  font-size: clamp(9px, .9vw, 11px);
+  font-size: clamp(14px, 1.6vw, 18px);
   font-weight: 700;
-  letter-spacing: .09em;
+  letter-spacing: .16em;
+  line-height: 1;
+  text-align: center;
+  text-indent: .16em;
   text-shadow: 0 1px 2px #001633;
 }
 
@@ -267,7 +274,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
   .picker-logo { top: 4%; width: 130px; }
   .picker-heading { top: 17%; }
   .picker-heading h1 { font-size: clamp(18px, 6vw, 28px); }
-  .hero-list { top: 56%; width: 96vw; gap: 4px; }
+  .hero-list { top: 56%; max-width: 96vw; gap: 4px; }
   .picker-actions { top: 79%; }
 }
 

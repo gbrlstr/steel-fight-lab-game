@@ -20,21 +20,27 @@ defineEmits<{ select: [hero: string] }>()
 <style scoped>
 .hero-card {
   position: relative;
+  box-sizing: border-box;
+  flex: 0 0 auto;
   width: clamp(64px, 8.9vw, 94px);
-  aspect-ratio: .63;
+  height: clamp(102px, 14.13vw, 149px);
+  margin: 0;
   padding: 0;
   overflow: visible;
   border: 1px solid #080b0e;
   background: #13171a;
   box-shadow: 0 0 0 1px #7b818444, 0 7px 18px #000b;
+  line-height: 0;
+  font-size: 0;
+  appearance: none;
   cursor: pointer;
-  transition: transform 130ms ease, filter 130ms ease;
+  transition: filter 130ms ease;
 }
 
 .hero-card::before {
   content: "";
   position: absolute;
-  inset: -2px;
+  inset: 0;
   z-index: 2;
   border: 1px solid #9ca0a188;
   pointer-events: none;
@@ -52,9 +58,9 @@ defineEmits<{ select: [hero: string] }>()
 /* Pronto ou selecionado: só a moldura — o preview 3D fica no canvas atrás */
 .hero-card.ready,
 .hero-card.selected {
-  border-color: transparent;
+  border-color: #080b0e;
   background: transparent;
-  box-shadow: none;
+  box-shadow: 0 0 0 1px #7b818444, 0 7px 18px #000b;
 }
 
 .hero-card.ready::after,
@@ -72,7 +78,6 @@ defineEmits<{ select: [hero: string] }>()
 
 .hero-card:hover {
   z-index: 3;
-  transform: translateY(-3px);
   filter: brightness(1.1);
 }
 
@@ -81,7 +86,6 @@ defineEmits<{ select: [hero: string] }>()
 }
 
 .hero-card.selected::before {
-  inset: -3px;
   border: 2px solid #d13a2d;
   box-shadow: inset 0 0 0 1px #ffb55a66, 0 0 9px #e1372355;
 }

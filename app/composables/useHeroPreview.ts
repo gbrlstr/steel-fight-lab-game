@@ -50,7 +50,12 @@ export function createHeroPreview(
 
   function slotOf(element: HTMLElement, view: DOMRect): Slot {
     const rect = element.getBoundingClientRect()
-    return { x: rect.left - view.left, y: view.bottom - rect.bottom, w: rect.width, h: rect.height }
+    return {
+      x: Math.round(rect.left - view.left),
+      y: Math.round(view.bottom - rect.bottom),
+      w: Math.round(rect.width),
+      h: Math.round(rect.height),
+    }
   }
 
   function measure() {
@@ -162,6 +167,11 @@ export function createHeroPreview(
   measure()
   window.addEventListener('resize', measure)
   document.addEventListener('visibilitychange', onVisibility)
+  const roster = root.querySelector('.hero-list')
+  const observer = typeof ResizeObserver === 'function' ? new ResizeObserver(() => measure()) : null
+  if (roster) observer?.observe(roster)
+  observer?.observe(root)
+  const later = window.setTimeout(measure, 480)
   void (async () => {
     for (const id of heroes) {
       let model: Model | null = null
@@ -191,6 +201,8 @@ export function createHeroPreview(
     cancelAnimationFrame(raf)
     window.removeEventListener('resize', measure)
     document.removeEventListener('visibilitychange', onVisibility)
+    observer?.disconnect()
+    window.clearTimeout(later)
     models.forEach(releaseFighter)
     renderer.dispose()
   }
