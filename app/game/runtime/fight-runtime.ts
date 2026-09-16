@@ -11,7 +11,7 @@ import { portrait } from '../shared/assets'
 import { acquireFighter, fighterStocked, FIGHTER_PRESENCE, loadFighter, releaseFighter } from '../render/fighters'
 import { hitboxDebug } from '../render/hitbox-debug'
 import { FX_LAYER, heroOutline, tagFx, tagHero } from '../render/hero-outline'
-import { initial, step, roster, RULES, fighter } from '../shared/combat'
+import { initial, step, roster, RULES, fighter, WORLD_PER_SIM } from '../shared/combat'
 const mix = (a: number, b: number, t: number) => Math.round(a + (b - a) * t)
 const hpPaint = (t: number) => {
     const c = (g: number[], r: number[]) => `rgb(${mix(r[0], g[0], t)},${mix(r[1], g[1], t)},${mix(r[2], g[2], t)})`
@@ -21,7 +21,7 @@ import labels from '../shared/labels.json'
 import { controls } from '../input/controls'
 import { lobbySession } from '../net/lobby-session'
 import { frameFight } from '../render/fight-camera'
-import { createMatchIntro, type MatchIntro } from '../render/fight-intro'
+import { createMatchIntro, INTRO_HOME, type MatchIntro } from '../render/fight-intro'
 import { sfx } from '../audio/game-audio'
 const escape = (v: unknown) => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
 export type FightRuntimeOptions = {
@@ -91,7 +91,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     const outline = heroOutline(renderer)
     let models: Awaited<ReturnType<typeof loadFighter>>[] = []
     mountArena(scene).catch(e => { get('status').textContent = 'Arena failed: ' + e.message })
-    async function fighters() { if (introPlayed) sfx.stop(); introPlayed = false; engaged = false; matchCalled = false; if (matchIntro) { matchIntro.dispose(); matchIntro = null } lastAction[0] = lastAction[1] = ''; hideVersus(); hideRoundCall(); hideVictory(); const gen = ++generation; loaded = false; if (!state.fighters.every(f => fighterStocked(f.hero, FIGHTER_PRESENCE))) get('announcement').textContent = 'LOADING FIGHTERS'; try { const next = await Promise.all(state.fighters.map(f => acquireFighter(f.hero, FIGHTER_PRESENCE))); if (disposed || gen !== generation) { next.forEach(releaseFighter); return } models.forEach(releaseFighter); models = next; models.forEach(m => { tagHero(m.root); actors.add(m.root) }); loaded = true; get('announcement').textContent = ''; const missing = next.flatMap(m => m.unmatched); get('status').textContent = missing.length ? `Accessories: ${missing.length} helper bones follow hierarchy (check)` : (network ? 'Online match • authoritative server' : 'Local fight • two controllers'); } catch (e) { get('announcement').textContent = 'LOAD FAILED'; get('status').textContent = String(e) } }
+    async function fighters() { if (introPlayed) sfx.stop(); introPlayed = false; engaged = false; matchCalled = false; if (matchIntro) { matchIntro.dispose(); matchIntro = null } lastAction[0] = lastAction[1] = ''; hideVersus(); hideRoundCall(); hideVictory(); const gen = ++generation; loaded = false; if (!state.fighters.every(f => fighterStocked(f.hero, FIGHTER_PRESENCE))) get('announcement').textContent = 'LOADING FIGHTERS'; try { const next = await Promise.all(state.fighters.map(f => acquireFighter(f.hero, FIGHTER_PRESENCE))); if (disposed || gen !== generation) { next.forEach(releaseFighter); return } models.forEach(releaseFighter); models = next; models.forEach((m, i) => { tagHero(m.root); m.root.visible = false; m.root.position.set(i ? 8.05 : -8.05, 0, 4.15); actors.add(m.root) }); loaded = true; get('announcement').textContent = ''; const missing = next.flatMap(m => m.unmatched); get('status').textContent = missing.length ? `Accessories: ${missing.length} helper bones follow hierarchy (check)` : (network ? 'Online match • authoritative server' : 'Local fight • two controllers'); } catch (e) { get('announcement').textContent = 'LOAD FAILED'; get('status').textContent = String(e) } }
     function moveTable() {
         const h = roster[selected], actions = h.m_vecActionDefinitions
         const title = (id: string) => { const named = actions.flatMap((a: any) => a.m_vecCancelOptions ?? []).find((c: any) => c.m_nCancelActionID === id && c.m_strCancelActionName); return (labels as any)[named?.m_strCancelActionName] ?? String(actions.find((a: any) => a.m_nActionID === id)?.m_pszSequenceName ?? id).replace('fighting_', '').replaceAll('_', ' ') }
@@ -142,8 +142,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     function startAnnouncerIntro() {
         if (disposed) return
         hideRoundCall()
+        hideVersus()
         get('announcement').textContent = ''
-        showVersus()
         sfx.afterPresent(release, onRoundPhase(false))
     }
     function showPresentName(name: string) {
@@ -154,14 +154,6 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         get('roundcall-text').textContent = name
         panel.classList.remove('fight', 'show')
         void panel.offsetWidth
-        panel.classList.add('show')
-        panel.setAttribute('aria-hidden', 'false')
-    }
-    function showVersus() {
-        const panel = app.querySelector<HTMLElement>('#versus')
-        if (!panel) return
-        get('versus0').textContent = roster[state.fighters[0].hero].name.toUpperCase()
-        get('versus1').textContent = roster[state.fighters[1].hero].name.toUpperCase()
         panel.classList.add('show')
         panel.setAttribute('aria-hidden', 'false')
     }
@@ -255,7 +247,19 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         projectiles.clear()
         void fighters()
     }
-    function release() { if (disposed) return; beginNextRound(); engaged = true; hideVersus(); hideRoundCall() }
+    function release() {
+        if (disposed) return
+        beginNextRound()
+        engaged = true
+        hideVersus()
+        hideRoundCall()
+    }
+    function keepIntroStance() {
+        state.fighters.forEach((f, i) => {
+            f.x = INTRO_HOME[i] / WORLD_PER_SIM
+            f.face = i ? -1 : 1
+        })
+    }
     function cues() {
         state.fighters.forEach((f, i) => {
             if (f.action === lastAction[i]) return
@@ -311,9 +315,21 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                 models,
                 names: state.fighters.map(f => roster[f.hero].name.toUpperCase()),
                 heroes: state.fighters.map(f => f.hero),
-                onShot: (_index, name, hero) => {
-                    showPresentName(name)
-                    void sfx.hero(hero)
+                onCue: cue => {
+                    if (cue.kind === 'walk') {
+                        hideRoundCall()
+                        hideVersus()
+                        get('announcement').textContent = ''
+                        return
+                    }
+                    if (cue.kind === 'versus') {
+                        hideVersus()
+                        showPresentName('VERSUS')
+                        void sfx.versus()
+                        return
+                    }
+                    showPresentName(cue.name)
+                    void sfx.hero(cue.hero)
                 },
             })
         }
@@ -349,14 +365,16 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         if (matchIntro && !matchIntro.update(time)) {
             matchIntro.dispose()
             matchIntro = null
+            keepIntroStance()
             get('announcement').textContent = ''
             startAnnouncerIntro()
         }
         models.forEach((m, i) => { if (!matchIntro) m.update(state.fighters[i]) })
         shadows.forEach((m, i) => {
             if (matchIntro) {
-                m.visible = models[i]?.root.visible ?? false
-                m.position.set(0, .015, 4.15)
+                const root = models[i]?.root
+                m.visible = root?.visible ?? false
+                m.position.set(root?.position.x ?? 0, .015, 4.15)
                 return
             }
             m.visible = true

@@ -184,7 +184,10 @@ export async function loadFighter(id: string, presence = 1) {
                 mixer.update(0)
             }
             root.position.set(f.x * WORLD_PER_SIM, floor, 4.15)
-            if (id === 'dawnbreaker') { root.rotation.y = f.face > 0 ? dawnYaw.left : dawnYaw.right; root.scale.z = Math.abs(root.scale.z) }
+            if (id === 'dawnbreaker') { 
+                root.rotation.y = f.face > 0 ? dawnYaw.left : dawnYaw.right; 
+                root.scale.z = Math.abs(root.scale.z) 
+            }
             else { root.rotation.y = Math.PI / 2; root.scale.z = Math.abs(root.scale.z) * f.face }
             sync(); if (!grounded) { const posed = new T.Box3().setFromObject(body, true); floor -= posed.min.y; root.position.y = floor; grounded = true; sync() }
         }, preview(time: number, turn = 0) {
@@ -210,6 +213,35 @@ export async function loadFighter(id: string, presence = 1) {
             root.position.set(x, floor, z)
             root.rotation.y = turn
             root.scale.z = Math.abs(root.scale.z)
+            root.visible = true
+            sync()
+            if (!grounded) { const posed = new T.Box3().setFromObject(body, true); floor -= posed.min.y; root.position.y = floor; grounded = true; sync() }
+        }, stage(clip: string, time: number, x: number, face: number, loop = true, towardCamera = false) {
+            const name = clips.has(clip) ? clip : clips.has('fighting_advancing') ? 'fighting_advancing' : clips.has('fighting_idle') ? 'fighting_idle' : [...clips.keys()][0]
+            if (name && clips.has(name)) {
+                if (name !== last) {
+                    current?.stop()
+                    current = mixer.clipAction(clips.get(name)!)
+                    current.setLoop(T.LoopRepeat, Infinity)
+                    current.clampWhenFinished = false
+                    current.play()
+                    last = name
+                }
+                const duration = Math.max(.001, clips.get(name)!.duration)
+                current!.time = loop ? ((time % duration) + duration) % duration : Math.min(duration - .001, Math.max(0, time))
+                mixer.update(0)
+            }
+            root.position.set(x, floor, 4.15)
+            if (towardCamera && id === 'dawnbreaker') {
+                root.rotation.y = -Math.PI / 2 + (face > 0 ? .82 : -.82)
+                root.scale.z = Math.abs(root.scale.z)
+            } else if (id === 'dawnbreaker') {
+                root.rotation.y = face > 0 ? dawnYaw.left : dawnYaw.right
+                root.scale.z = Math.abs(root.scale.z)
+            } else {
+                root.rotation.y = Math.PI / 2
+                root.scale.z = Math.abs(root.scale.z) * face
+            }
             root.visible = true
             sync()
             if (!grounded) { const posed = new T.Box3().setFromObject(body, true); floor -= posed.min.y; root.position.y = floor; grounded = true; sync() }

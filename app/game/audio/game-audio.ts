@@ -166,6 +166,7 @@ export const sfx={
  slide(){named('ui/menu/map_open',.4,.8)},
  present(){music('menu',.45);armed()},
  hero(id:string){stopLine();return speak(voice[id],.95)},
+ versus(){stopLine();return speak('vo/announcer_dota_fighter/dota_fighter_versus')},
  swing(hero:string,actionId:string){
   if(quiet.has(actionId))return
   if(actionId==='SWAP_ACTION_DEFINITION'){pick('Hero_VengefulSpirit.NetherSwap',1);return}
@@ -201,13 +202,11 @@ export const sfx={
    onGo()
   })()
  },
- /** Names already played on each hero shot; keep menu bed until FIGHT. */
+ /** Walk-in already named both fighters and called versus; keep menu bed until FIGHT. */
  afterPresent(onGo:()=>void,onPhase?:(phase:'round'|'fight')=>void){
   stopLine()
   const gen=lineGen
   void (async()=>{
-   await speak('vo/announcer_dota_fighter/dota_fighter_versus')
-   if(gen!==lineGen)return
    await this.roundCall(false,onPhase)
    if(gen!==lineGen)return
    music('fight',.5)
