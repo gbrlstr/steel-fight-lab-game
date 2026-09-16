@@ -168,6 +168,7 @@ export const sfx={
   if(actionId==='STARBREAKER_1_ACTION_DEFINITION'||actionId==='STARBREAKER_2_ACTION_DEFINITION'){pick('Hero_Dawnbreaker.Fire_Wreath.Sweep',.9);return}
   if(actionId==='STARBREAKER_3_ACTION_DEFINITION'){pick('Hero_Dawnbreaker.Fire_Wreath.Smash',1);return}
   if(actionId?.startsWith('QUILLSPRAY_')){pick('Hero_Bristleback.QuillSpray.Cast',1);return}
+  if(actionId==='WALRUS_PUNCH_ACTION_DEFINITION'){pick('Hero_Tusk.PreAttack',1);return}
   const def=roster[hero]?.m_vecActionDefinitions.find((a:any)=>a.m_nActionID===actionId)
   if(!def?.m_pszSwingSound&&!def?.m_HitBox&&!def?.m_flProjectileSpeed&&!def?.m_nInstallFrames)return
   pick(def?.m_pszSwingSound??roster[hero]?.m_pszBasicSwingSound,1)

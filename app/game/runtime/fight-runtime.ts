@@ -3,6 +3,7 @@ import { netherSwapFx, type SwapBurst } from '../render/nether-swap'
 import { marciUnleashFx, type UnleashAura, type UnleashBurst } from '../render/marci-unleash'
 import { dawnbreakerLuminosityFx, type LuminosityBurst } from '../render/dawnbreaker-luminosity'
 import { bristlebackQuillFx, type QuillBurst } from '../render/bristleback-quill'
+import { tuskWalrusPunchFx, type WalrusBurst } from '../render/tusk-walrus-punch'
 import { projectileEffects, type ProjectileVisual } from '../render/projectile-effects'
 import * as T from 'three'
 import { mountArena } from '../render/arena-game'
@@ -130,8 +131,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         if (event === 'error') get('status').textContent = snapshot.status
     })
     const resize = new ResizeObserver(() => { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix(); sceneryCamera.aspect = camera.aspect; sceneryCamera.updateProjectionMatrix() }); resize.observe(stage)
-    const impacts = hitSparks(); const swaps = netherSwapFx(); const unleashFx = marciUnleashFx(); const luminosityFx = dawnbreakerLuminosityFx(); const quillFx = bristlebackQuillFx()
-    const sparks = new Map<string, HitSpark>(); const swapBursts = new Map<string, SwapBurst>(); const unleashBursts = new Map<string, UnleashBurst>(); const luminosityBursts = new Map<string, LuminosityBurst>(); const quillBursts = new Map<string, QuillBurst>()
+    const impacts = hitSparks(); const swaps = netherSwapFx(); const unleashFx = marciUnleashFx(); const luminosityFx = dawnbreakerLuminosityFx(); const quillFx = bristlebackQuillFx(); const walrusFx = tuskWalrusPunchFx()
+    const sparks = new Map<string, HitSpark>(); const swapBursts = new Map<string, SwapBurst>(); const unleashBursts = new Map<string, UnleashBurst>(); const luminosityBursts = new Map<string, LuminosityBurst>(); const quillBursts = new Map<string, QuillBurst>(); const walrusBursts = new Map<string, WalrusBurst>()
     const unleashAuras: (UnleashAura | null)[] = [null, null]
     const seen = new Set<string>(); const pending: { id: string; kind: 'hit' | 'block' | 'swap' | 'install'; x: number; face: number; hero: string; action: string }[] = []; const effects = projectileEffects(); const projectiles = new Map<string, ProjectileVisual>()
     const lastAction = ['', '']
@@ -214,6 +215,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         luminosityBursts.clear()
         for (const burst of quillBursts.values()) { actors.remove(burst.root); burst.dispose() }
         quillBursts.clear()
+        for (const burst of walrusBursts.values()) { actors.remove(burst.root); burst.dispose() }
+        walrusBursts.clear()
         for (let i = 0; i < 2; i++) {
             if (unleashAuras[i]) { actors.remove(unleashAuras[i]!.root); unleashAuras[i]!.dispose(); unleashAuras[i] = null }
         }
@@ -256,6 +259,13 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                 tagFx(cast.root)
                 actors.add(cast.root)
                 quillBursts.set(`cast:${state.round}:${state.frame}:${i}:${f.action}`, cast)
+            }
+            if (f.action === 'WALRUS_PUNCH_ACTION_DEFINITION' && f.hero === 'tusk') {
+                const cast = walrusFx.create({ x: f.x / 300 + f.face * 0.55 * FIGHTER_PRESENCE, y: 1.7 * FIGHTER_PRESENCE, z: 4.15 + .55 * FIGHTER_PRESENCE }, f.face, performance.now())
+                cast.root.scale.setScalar(FIGHTER_PRESENCE)
+                tagFx(cast.root)
+                actors.add(cast.root)
+                walrusBursts.set(`cast:${state.round}:${state.frame}:${i}`, cast)
             }
         })
         if (!introPlayed && loaded) { introPlayed = true; engaged = false; hideVictory(); hideRoundCall(); showVersus(); sfx.intro(state.fighters[0].hero, state.fighters[1].hero, release, onRoundPhase(false)) }
@@ -351,6 +361,13 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                     actors.add(burst.root)
                     quillBursts.set(`hit:${e.id}`, burst)
                 }
+                if (e.kind === 'hit' && e.action === 'WALRUS_PUNCH_ACTION_DEFINITION' && e.hero === 'tusk') {
+                    const burst = walrusFx.create(at, e.face, time)
+                    burst.root.scale.setScalar(FIGHTER_PRESENCE * 1.2)
+                    tagFx(burst.root)
+                    actors.add(burst.root)
+                    walrusBursts.set(`hit:${e.id}`, burst)
+                }
                 const spark = impacts.create(e.kind, at, e.face, time)
                 spark.root.scale.setScalar(FIGHTER_PRESENCE)
                 tagFx(spark.root)
@@ -364,6 +381,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         for (const [id, burst] of unleashBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); unleashBursts.delete(id) }
         for (const [id, burst] of luminosityBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); luminosityBursts.delete(id) }
         for (const [id, burst] of quillBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); quillBursts.delete(id) }
+        for (const [id, burst] of walrusBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); walrusBursts.delete(id) }
         for (let i = 0; i < 2; i++) {
             const aura = unleashAuras[i]
             const f = state.fighters[i]
@@ -396,6 +414,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         luminosityFx.dispose()
         for (const burst of quillBursts.values()) burst.dispose()
         quillFx.dispose()
+        for (const burst of walrusBursts.values()) burst.dispose()
+        walrusFx.dispose()
         for (const effect of projectiles.values()) effect.dispose(); effects.dispose(); boxes.dispose(); outline.dispose(); renderer.dispose()
     }
 }
