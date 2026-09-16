@@ -5,7 +5,7 @@ export type HitSpark={root:T.Object3D;update:(time:number)=>boolean;dispose:()=>
 // Layer counts, colors, 0.2–0.4s lifetimes and punch-axis spray follow the VPCFs.
 // Sprite size is a function of age, so playback rate cannot inflate the burst.
 const plane=new T.PlaneGeometry(1,1)
-const hitLife=.62,blockLife=.32
+const hitLife=.62,blockLife=.34
 
 function easeRadius(t:number){return t<=.206?t/.206*.751:.751+(t-.206)/.794*.249}
 function easeAlpha(t:number){return t<=.128?.881+t/.128*.119:Math.max(0,1-(t-.128)/.872)}
@@ -55,10 +55,10 @@ export function hitSparks(){
     flash.visible=soft.visible=bloom.visible=ring.visible=live
     if(!live)return
     const radius=easeRadius(t),alpha=easeAlpha(t)
-    flash.scale.setScalar(2.2+radius*3.6);flash.material.opacity=alpha
-    soft.scale.setScalar((2.2+radius*3.6)*.42);soft.material.opacity=alpha*.85
-    bloom.scale.setScalar(2.4+radius*2.8);bloom.material.opacity=alpha*.5
-    ring.scale.setScalar(.9+radius*4.2);ring.material.opacity=alpha*.9
+    flash.scale.setScalar(2.6+radius*4.2);flash.material.opacity=alpha
+    soft.scale.setScalar((2.6+radius*4.2)*.44);soft.material.opacity=alpha*.9
+    bloom.scale.setScalar(2.8+radius*3.4);bloom.material.opacity=alpha*.62
+    ring.scale.setScalar(1.05+radius*4.8);ring.material.opacity=alpha
     ring.position.x=face*age*.4
    })
    const cores=Array.from({length:5},()=>{
@@ -83,7 +83,7 @@ export function hitSparks(){
     const orange=i>9
     return {
      mesh:streak(i<6?flecks[i%4]!:'particle_glow_01',orange?0xffb36b:0xffd6d6),
-     vx:face*(1.6+rand()*2.4),vy:(rand()-.42)*2.2,drag,life:.32+rand()*.28,width:.16+rand()*.1,grav:-1.15,
+     vx:face*(1.6+rand()*2.4),vy:(rand()-.12)*2.35,drag,life:.34+rand()*.3,width:.18+rand()*.12,grav:-.42,
     }
    })
    layers.push(age=>{
@@ -99,18 +99,19 @@ export function hitSparks(){
     }
    })
   }else{
-   const edge=sprite('particle_sphere_highlight5',0x3eb5ff)
+   const edge=sprite('particle_sphere_highlight5',0x5ec8ff)
    const dome=sprite('particle_glow_08',0x8fd8ff)
    edge.material.rotation=face*Math.PI/2
    layers.push(age=>{
     const t=Math.min(1,age/.22),alpha=t<.12?t/.12:Math.max(0,1-(t-.12)/.88)
     edge.visible=age<.22;dome.visible=age<.28
-    edge.scale.setScalar(2.2+t*1.1);edge.material.opacity=alpha;edge.position.x=face*age*.35
-    dome.scale.setScalar(2.4+t*1.2);dome.material.opacity=alpha*.32
+    if(age>=.28)return
+    edge.scale.setScalar(2.55+t*1.25);edge.material.opacity=alpha;edge.position.x=face*age*.35
+    dome.scale.setScalar(2.7+t*1.35);dome.material.opacity=alpha*.48
    })
    const sparks=Array.from({length:6},()=>({
     mesh:streak('particle_glow_01',0x9adfff),
-    vx:-face*(.4+rand()*.9),vy:(rand()-.2)*.7,drag:.2,life:.12+rand()*.12,width:.05+rand()*.04,
+    vx:-face*(.4+rand()*.9),vy:(rand()-.2)*.7,drag:.2,life:.12+rand()*.12,width:.06+rand()*.05,
    }))
    layers.push(age=>{
     for(const spark of sparks){
@@ -121,7 +122,7 @@ export function hitSparks(){
      spark.mesh.position.set(travel(spark.vx,spark.drag,age),travel(spark.vy,spark.drag,age),.03)
      spark.mesh.rotation.z=Math.atan2(vy,vx)-Math.PI/2
      spark.mesh.scale.set(spark.width,spark.width+Math.hypot(vx,vy)*.08,1)
-     spark.mesh.material.opacity=(1-t)*.75
+     spark.mesh.material.opacity=(1-t)*.8
     }
    })
   }

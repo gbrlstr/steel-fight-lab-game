@@ -11,7 +11,7 @@ import { portrait } from '../shared/assets'
 import { acquireFighter, fighterStocked, FIGHTER_PRESENCE, loadFighter, releaseFighter } from '../render/fighters'
 import { hitboxDebug } from '../render/hitbox-debug'
 import { FX_LAYER, heroOutline, tagFx, tagHero } from '../render/hero-outline'
-import { initial, step, roster, RULES, fighter, WORLD_PER_SIM } from '../shared/combat'
+import { initial, step, roster, RULES, fighter, WORLD_PER_SIM, FIGHTER_TARGET_HEIGHT } from '../shared/combat'
 const mix = (a: number, b: number, t: number) => Math.round(a + (b - a) * t)
 const hpPaint = (t: number) => {
     const c = (g: number[], r: number[]) => `rgb(${mix(r[0], g[0], t)},${mix(r[1], g[1], t)},${mix(r[2], g[2], t)})`
@@ -90,6 +90,36 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     const boxes = hitboxDebug(); actors.add(boxes.root); tagFx(boxes.root)
     const outline = heroOutline(renderer)
     let models: Awaited<ReturnType<typeof loadFighter>>[] = []
+    const chestScratch = new T.Vector3()
+    const impactBones = new WeakMap<T.Object3D, T.Object3D | null>()
+    function impactAt(root: T.Object3D | undefined, face: number, kind: 'hit' | 'block', x: number) {
+        const lift = FIGHTER_TARGET_HEIGHT * FIGHTER_PRESENCE * (kind === 'block' ? 0.66 : 0.62)
+        const z = 4.15 + 0.55 * FIGHTER_PRESENCE
+        if (!root) return { x: x / 300, y: lift, z }
+        let bone = impactBones.get(root)
+        if (bone === undefined) {
+            let found: T.Object3D | null = null
+            root.traverse(object => {
+                if (found || !(object as T.Bone).isBone) return
+                if (/chest|spine[_]?2|spine02/i.test(object.name)) found = object
+            })
+            if (!found) root.traverse(object => {
+                if (found || !(object as T.Bone).isBone) return
+                if (/spine/i.test(object.name)) found = object
+            })
+            bone = found
+            impactBones.set(root, bone)
+        }
+        if (bone) {
+            bone.getWorldPosition(chestScratch)
+            return {
+                x: chestScratch.x - face * 0.2,
+                y: chestScratch.y + (kind === 'block' ? 0.14 : 0.04),
+                z: chestScratch.z + 0.42 * FIGHTER_PRESENCE,
+            }
+        }
+        return { x: root.position.x - face * 0.12, y: root.position.y + lift, z: root.position.z + 0.55 * FIGHTER_PRESENCE }
+    }
     mountArena(scene).catch(e => { get('status').textContent = 'Arena failed: ' + e.message })
     async function fighters() { if (introPlayed) sfx.stop(); introPlayed = false; engaged = false; matchCalled = false; if (matchIntro) { matchIntro.dispose(); matchIntro = null } lastAction[0] = lastAction[1] = ''; hideVersus(); hideRoundCall(); hideVictory(); const gen = ++generation; loaded = false; if (!state.fighters.every(f => fighterStocked(f.hero, FIGHTER_PRESENCE))) get('announcement').textContent = 'LOADING FIGHTERS'; try { const next = await Promise.all(state.fighters.map(f => acquireFighter(f.hero, FIGHTER_PRESENCE))); if (disposed || gen !== generation) { next.forEach(releaseFighter); return } models.forEach(releaseFighter); models = next; models.forEach((m, i) => { tagHero(m.root); m.root.visible = false; m.root.position.set(i ? 8.05 : -8.05, 0, 4.15); actors.add(m.root) }); loaded = true; get('announcement').textContent = ''; const missing = next.flatMap(m => m.unmatched); get('status').textContent = missing.length ? `Accessories: ${missing.length} helper bones follow hierarchy (check)` : (network ? 'Online match • authoritative server' : 'Local fight • two controllers'); } catch (e) { get('announcement').textContent = 'LOAD FAILED'; get('status').textContent = String(e) } }
     function moveTable() {
@@ -435,8 +465,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                 }
             } else if (e.kind === 'hit' || e.kind === 'block') {
                 const i = Math.abs(state.fighters[0].x - e.x) <= Math.abs(state.fighters[1].x - e.x) ? 0 : 1
-                const origin = models[i]?.root.position
-                const at = origin ? { x: origin.x, y: origin.y + y, z: origin.z + .55 * FIGHTER_PRESENCE } : { x: e.x / 300, y, z }
+                const at = impactAt(models[i]?.root, e.face, e.kind, e.x)
                 if (e.kind === 'hit' && e.action === 'LUMINOSITY_ACTION_DEFINITION' && e.hero === 'dawnbreaker') {
                     const burst = luminosityFx.create(at, e.face, time)
                     burst.root.scale.setScalar(FIGHTER_PRESENCE * 1.15)
@@ -460,7 +489,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                     walrusBursts.set(`hit:${e.id}`, burst)
                 }
                 const spark = impacts.create(e.kind, at, e.face, time)
-                spark.root.scale.setScalar(FIGHTER_PRESENCE)
+                spark.root.scale.setScalar(FIGHTER_PRESENCE * (e.kind === 'block' ? 2 : 1.12))
                 tagFx(spark.root)
                 actors.add(spark.root)
                 sparks.set(e.id, spark)
