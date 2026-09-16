@@ -5,6 +5,7 @@ const props = defineProps<{
   busy: boolean
   invite?: string
   rooms?: LobbyRoomSummary[]
+  roomsError?: string
 }>()
 const emit = defineEmits<{
   connect: [type: 'create' | 'join', nick: string, code: string]
@@ -49,7 +50,10 @@ defineExpose({ focusPanel })
           REFRESH
         </button>
       </div>
-      <div v-if="!rooms?.length" class="font-ui text-[10px] leading-5 text-[#91a1b0]">
+      <div v-if="roomsError" class="font-ui text-[10px] leading-5 text-[#f0a090]">
+        {{ roomsError }}
+      </div>
+      <div v-else-if="!rooms?.length" class="font-ui text-[10px] leading-5 text-[#91a1b0]">
         No online rooms right now. Create one to get started.
       </div>
       <button

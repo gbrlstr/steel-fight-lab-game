@@ -4,15 +4,57 @@
   <img src="./app/assets/menu/steelfightlab_logo.png" alt="Steel Fight Lab" width="520">
 </p>
 
+<p align="center">
+  <a href="https://github.com/gbrlstr/steel-fight-lab-game/releases"><img src="https://img.shields.io/badge/version-0.0.1-d2ac5d?style=flat-square" alt="Version 0.0.1"></a>
+  <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-2ea44f?style=flat-square" alt="MIT License"></a>
+  <a href="https://github.com/gbrlstr/steel-fight-lab-game/issues"><img src="https://img.shields.io/github/issues/gbrlstr/steel-fight-lab-game?style=flat-square" alt="Open issues"></a>
+  <a href="https://github.com/gbrlstr/steel-fight-lab-game/stargazers"><img src="https://img.shields.io/github/stars/gbrlstr/steel-fight-lab-game?style=flat-square" alt="GitHub stars"></a>
+  <a href="https://github.com/gbrlstr/steel-fight-lab-game/network/members"><img src="https://img.shields.io/github/forks/gbrlstr/steel-fight-lab-game?style=flat-square" alt="GitHub forks"></a>
+  <img src="https://img.shields.io/github/languages/top/gbrlstr/steel-fight-lab-game?style=flat-square" alt="Top language">
+  <img src="https://img.shields.io/github/last-commit/gbrlstr/steel-fight-lab-game?style=flat-square" alt="Last commit">
+</p>
+
 Browser-based 1v1 fighting client with online rooms, tournament brackets, and 3D rendering.
 
 Independent prototype inspired by arena fighting mechanics. **Not an official Valve product** and does not claim full fidelity to Sleet Fighter / Dota 2.
 
 | | |
 | --- | --- |
+| **Version** | `0.0.1` ([package.json](./package.json)) |
 | **Stack** | Nuxt 4 · Vue 3 · Pinia · Tailwind CSS 4 · Three.js · TypeScript |
 | **Multiplayer** | WebSocket + client-side rollback · authority on **sleet-fighter-server** |
+| **Issues** | [github.com/gbrlstr/steel-fight-lab-game/issues](https://github.com/gbrlstr/steel-fight-lab-game/issues) |
 | **License** | [MIT](./LICENSE.md) (code). Valve assets are **not** included in the license. |
+
+---
+
+## Project statistics
+
+| Metric | Value |
+| --- | --- |
+| **Client version** | `0.0.1` |
+| **Repository** | [gbrlstr/steel-fight-lab-game](https://github.com/gbrlstr/steel-fight-lab-game) |
+| **Default branch** | `master` |
+| **Playable heroes** | 5 (Tusk, Bristleback, Shendelzare, Marci, Dawnbreaker) |
+| **Main routes** | `/` · `/lobby` · `/select` · `/fight` |
+| **Source footprint** | ~82 app/source files · ~23k lines (excl. `node_modules`, assets, builds) |
+| **GitHub** | [Stars](https://github.com/gbrlstr/steel-fight-lab-game/stargazers) · [Forks](https://github.com/gbrlstr/steel-fight-lab-game/network/members) · [Issues](https://github.com/gbrlstr/steel-fight-lab-game/issues) · [PRs](https://github.com/gbrlstr/steel-fight-lab-game/pulls) |
+
+Live counters (stars, forks, open issues, last commit) update automatically via the badges above.
+
+---
+
+## Issues
+
+Bug reports, feature requests, and netcode/UX notes go in **GitHub Issues**:
+
+- **Open an issue:** [New issue](https://github.com/gbrlstr/steel-fight-lab-game/issues/new)
+- **Browse open issues:** [All issues](https://github.com/gbrlstr/steel-fight-lab-game/issues)
+- **Labels to prefer:** `bug`, `enhancement`, `docs`, `netcode`, `assets` (when available)
+
+Please include OS/browser, local vs online, and steps to reproduce. **Do not** attach Valve VPKs or proprietary asset dumps.
+
+Companion server issues: [sleet-fighter-server](https://github.com/gbrlstr/steel-fight-lab-server/issues).
 
 ---
 
@@ -77,6 +119,15 @@ Public Nuxt / environment variables:
 | `NUXT_PUBLIC_WS_URL` | `ws://127.0.0.1:3001` | Multiplayer WebSocket endpoint |
 | `NUXT_PUBLIC_API_URL` | `http://127.0.0.1:3010` | HTTP API (room list, health) |
 | `NUXT_PUBLIC_GITHUB_URL` | `https://github.com/gbrlstr/steel-fight-lab-game` | Title-screen GitHub banner link |
+
+**Production (Vercel):** the frontend alone cannot host rooms. Deploy **sleet-fighter-server** somewhere with a public HTTPS/WSS URL (Railway, Render, Fly, VPS…), then set both env vars in the Vercel project **before build**:
+
+```bash
+NUXT_PUBLIC_API_URL=https://your-server.example.com
+NUXT_PUBLIC_WS_URL=wss://your-server.example.com
+```
+
+If these stay on `127.0.0.1`, OPEN ROOMS stays empty and Create/Join cannot reach the backend.
 
 In `nuxt.config.ts`:
 

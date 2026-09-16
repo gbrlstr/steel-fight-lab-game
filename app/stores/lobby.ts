@@ -19,6 +19,7 @@ export const useLobbyStore = defineStore('lobby', () => {
   const result = ref('')
   const lastEvent = ref('')
   const openRooms = shallowRef<LobbyRoomSummary[]>([])
+  const roomsError = ref('')
   const paused = ref(false)
   const pauseUntil = ref(0)
   const pauseMessage = ref('')
@@ -37,6 +38,7 @@ export const useLobbyStore = defineStore('lobby', () => {
       match.value = snapshot.match
       result.value = snapshot.result
       openRooms.value = snapshot.openRooms
+      roomsError.value = snapshot.roomsError
       paused.value = snapshot.paused
       pauseUntil.value = snapshot.pauseUntil
       pauseMessage.value = snapshot.pauseMessage
@@ -64,6 +66,7 @@ export const useLobbyStore = defineStore('lobby', () => {
     result,
     lastEvent,
     openRooms,
+    roomsError,
     paused,
     pauseUntil,
     pauseMessage,

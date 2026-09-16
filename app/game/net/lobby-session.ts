@@ -44,6 +44,7 @@ export type LobbySnapshot = {
   match: State | null
   result: string
   openRooms: LobbyRoomSummary[]
+  roomsError: string
   paused: boolean
   pauseUntil: number
   pauseMessage: string
@@ -99,6 +100,7 @@ export class LobbySession {
   match: State | null = null
   result = ''
   openRooms: LobbyRoomSummary[] = []
+  roomsError = ''
   paused = false
   pauseUntil = 0
   pauseMessage = ''
@@ -127,6 +129,7 @@ export class LobbySession {
       match: this.match,
       result: this.result,
       openRooms: this.openRooms,
+      roomsError: this.roomsError,
       paused: this.paused,
       pauseUntil: this.pauseUntil,
       pauseMessage: this.pauseMessage,
@@ -151,14 +154,31 @@ export class LobbySession {
 
   async refreshRooms() {
     if (!this.apiUrl || this.room) return
+    const localApi = /^(https?:\/\/)?(127\.0\.0\.1|localhost)(:\d+)?/i.test(this.apiUrl)
+    const pageHttps = typeof location !== 'undefined' && location.protocol === 'https:'
+    if (pageHttps && /^http:\/\//i.test(this.apiUrl)) {
+      this.openRooms = []
+      this.roomsError = `API blocked on HTTPS (mixed content). Set NUXT_PUBLIC_API_URL to an https:// backend — currently ${this.apiUrl}`
+      this.emit('rooms')
+      return
+    }
+    if (localApi && typeof location !== 'undefined' && !/^(localhost|127\.0\.0\.1)$/i.test(location.hostname)) {
+      this.openRooms = []
+      this.roomsError = `Production still points to ${this.apiUrl}. Set NUXT_PUBLIC_API_URL / NUXT_PUBLIC_WS_URL to your hosted sleet-fighter-server.`
+      this.emit('rooms')
+      return
+    }
     try {
       const response = await fetch(`${this.apiUrl.replace(/\/$/, '')}/rooms`)
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       const data = await response.json() as { rooms?: LobbyRoomSummary[] }
       this.openRooms = Array.isArray(data.rooms) ? data.rooms : []
+      this.roomsError = ''
       this.emit('rooms')
-    } catch {
+    } catch (error) {
       this.openRooms = []
+      const detail = error instanceof Error ? error.message : 'network error'
+      this.roomsError = `Cannot reach room API at ${this.apiUrl} (${detail}). Is sleet-fighter-server online?`
       this.emit('rooms')
     }
   }

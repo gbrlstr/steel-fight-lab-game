@@ -91,6 +91,7 @@ async function back() {
           :busy="lobby.connecting"
           :invite="invite"
           :rooms="lobby.openRooms"
+          :rooms-error="lobby.roomsError"
           @connect="lobby.connect"
           @refresh="lobby.refreshRooms"
         />
