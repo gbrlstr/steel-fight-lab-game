@@ -10,15 +10,22 @@ const extras = [
     { url: '/arena/arena-scene.glb', label: 'Arena' },
 ]
 
-export async function prepareMatchEntry(heroes: string[], onProgress: (progress: BootProgress) => void) {
+export async function prepareMatchEntry(picks: Array<string | { id: string; skin?: string }>, onProgress: (progress: BootProgress) => void) {
     const { prepareArena } = await import('./arena-game')
-    const need = new Map<string, number>()
-    for (const id of heroes) need.set(id, (need.get(id) ?? 0) + 1)
-    const jobs = [...need.entries()]
+    const need = new Map<string, { id: string; skin: string; copies: number }>()
+    for (const pick of picks) {
+        const id = typeof pick === 'string' ? pick : pick.id
+        const skin = typeof pick === 'string' ? 'default' : (pick.skin ?? 'default')
+        const key = `${id}::${skin}`
+        const current = need.get(key)
+        if (current) current.copies += 1
+        else need.set(key, { id, skin, copies: 1 })
+    }
+    const jobs = [...need.values()]
     onProgress({ ratio: .08, label: 'Building fighters' })
     for (let i = 0; i < jobs.length; i++) {
-        const [id, copies] = jobs[i]
-        await ensureStock(id, FIGHTER_PRESENCE, copies)
+        const job = jobs[i]
+        await ensureStock(job.id, FIGHTER_PRESENCE, job.copies, job.skin)
         onProgress({ ratio: .12 + ((i + 1) / Math.max(1, jobs.length)) * .62, label: 'Building fighters' })
     }
     onProgress({ ratio: .82, label: 'Building arena' })

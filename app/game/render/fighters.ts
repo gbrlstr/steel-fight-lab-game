@@ -4,27 +4,116 @@ import { action, FIGHTER_PRESENCE, FIGHTER_TARGET_HEIGHT, WORLD_PER_SIM, isGuard
 import type { Fighter } from '../shared/combat'
 import { loadGltf } from './asset-cache'
 export { FIGHTER_PRESENCE }
-const assets: Record<string, [string, string[]]> = { tusk: ['tuskarr', ['tuskarr', 'tusk_armor_glove', 'tusk_cowl', 'tusk_hat', 'tusk_horns', 'tusk_weapon', 'tusk_fish_basket']], bristleback: ['bristleback', ['bristleback', 'bristleback_back', 'bristleback_bracer', 'bristleback_head', 'bristleback_necklace', 'bristleback_weapon']], vengeful: ['shendelzare', ['vengeful_spirit_arcana', 'vengeful_spirit_arcana_head_refit', 'vengeful_spirit_arcana_legs_refit', 'vengeful_spirit_arcana_weapon', 'vengeful_spirit_arcana_shoulders']], marci: ['marci', ['marci_base', 'marci_back', 'marci_costume', 'marci_head', 'marci_shoulders']], dawnbreaker: ['dawnbreaker', ['dawnbreaker', 'dawnbreaker_armor', 'dawnbreaker_arms', 'dawnbreaker_head', 'dawnbreaker_weapon']] }
-export const fighterIds = Object.keys(assets)
+
+type Kit = { body: string; parts: string[] }
+export type SkinOption = { id: string; name: string }
+
+function files(folder: string, names: string[]): Kit {
+    return { body: `/fighters/${folder}/${names[0]}.glb`, parts: names.slice(1).map(name => `/fighters/${folder}/${name}.glb`) }
+}
+function skinParts(folder: string, skin: string, names: string[]) {
+    return names.map(name => `/fighters/${folder}/skins/${skin}/${name}.glb`)
+}
+
+export const fighterSkins: Record<string, SkinOption[]> = {
+    tusk: [
+        { id: 'default', name: 'Default' },
+        { id: 'frostiron', name: 'Frostiron Raider' },
+        { id: 'frozen_sea', name: 'King of the Frozen Sea' },
+        { id: 'icelord', name: 'Ice Lord' },
+    ],
+    bristleback: [
+        { id: 'default', name: 'Default' },
+        { id: 'fisherman', name: 'Evil Eye Fisherman' },
+        { id: 'arena', name: 'Warrior of the Arena' },
+        { id: 'wrathrunner', name: 'Wrath Runner' },
+    ],
+    vengeful: [
+        { id: 'default', name: 'Arcana' },
+        { id: 'seraph', name: 'Lost Seraph' },
+        { id: 'countess', name: 'Dark Arts Countess' },
+        { id: 'forsaken', name: 'Forsaken Wings' },
+    ],
+    marci: [
+        { id: 'default', name: 'Default' },
+        { id: 'dragon', name: 'Dragon School' },
+        { id: 'bloom', name: 'Bloomjewel' },
+        { id: 'lotus', name: 'Lotus Keeper' },
+    ],
+    dawnbreaker: [
+        { id: 'default', name: 'Default' },
+        { id: 'first_light', name: 'First Light' },
+        { id: 'judgement', name: 'Judgement of Light' },
+        { id: 'astral', name: 'Astral Angel' },
+    ],
+}
+
+const kits: Record<string, Record<string, Kit>> = {
+    tusk: {
+        default: files('tuskarr', ['tuskarr', 'tusk_armor_glove', 'tusk_cowl', 'tusk_hat', 'tusk_horns', 'tusk_weapon', 'tusk_fish_basket']),
+        frostiron: { body: '/fighters/tuskarr/tuskarr.glb', parts: skinParts('tuskarr', 'frostiron', ['frostiron_raider_fist', 'frostiron_raider_cape', 'frostiron_raider_helm', 'frostiron_raider_tusks', 'frostiron_raider_axe', 'frostiron_raider_back']) },
+        frozen_sea: { body: '/fighters/tuskarr/tuskarr.glb', parts: skinParts('tuskarr', 'frozen_sea', ['king_of_the_frozen_sea_arms', 'king_of_the_frozen_sea_neck', 'king_of_the_frozen_sea_head', 'king_of_the_frozen_sea_shoulder', 'king_of_the_frozen_sea_weapon', 'king_of_the_frozen_sea_back']) },
+        icelord: { body: '/fighters/tuskarr/tuskarr.glb', parts: skinParts('tuskarr', 'icelord', ['icelord_arms', 'icelord_neck', 'icelord_head', 'icelord_shoulder', 'icelord_weapon', 'icelord_back']) },
+    },
+    bristleback: {
+        default: files('bristleback', ['bristleback', 'bristleback_back', 'bristleback_bracer', 'bristleback_head', 'bristleback_necklace', 'bristleback_weapon']),
+        fisherman: { body: '/fighters/bristleback/bristleback.glb', parts: skinParts('bristleback', 'fisherman', ['fisherman_with_evil_eye_back', 'fisherman_with_evil_eye_arms', 'fisherman_with_evil_eye_head', 'fisherman_with_evil_eye_neck', 'fisherman_with_evil_eye_weapon']) },
+        arena: { body: '/fighters/bristleback/bristleback.glb', parts: skinParts('bristleback', 'arena', ['bristleback_warrior_of_arena_back', 'bristleback_warrior_of_arena_arms', 'bristleback_warrior_of_arena_head', 'bristleback_warrior_of_arena_neck', 'bristleback_warrior_of_arena_weapon']) },
+        wrathrunner: { body: '/fighters/bristleback/bristleback.glb', parts: skinParts('bristleback', 'wrathrunner', ['wrathrunner_back', 'wrathrunner_arms', 'wrathrunner_head', 'wrathrunner_neck', 'wrathrunner_weapon']) },
+    },
+    vengeful: {
+        default: files('shendelzare', ['vengeful_spirit_arcana', 'vengeful_spirit_arcana_head_refit', 'vengeful_spirit_arcana_legs_refit', 'vengeful_spirit_arcana_weapon', 'vengeful_spirit_arcana_shoulders']),
+        seraph: { body: '/fighters/shendelzare/vengeful_spirit_arcana.glb', parts: skinParts('shendelzare', 'seraph', ['venge_lost_seraph_head_refit', 'venge_lost_seraph_legs_refit', 'venge_lost_seraph_weapon', 'venge_lost_seraph_shoulder']) },
+        countess: { body: '/fighters/shendelzare/vengeful_spirit_arcana.glb', parts: skinParts('shendelzare', 'countess', ['dark_arts_countess_head_refit', 'dark_arts_countess_legs_refit', 'dark_arts_countess_weapon', 'dark_arts_countess_shoulder']) },
+        forsaken: { body: '/fighters/shendelzare/vengeful_spirit_arcana.glb', parts: skinParts('shendelzare', 'forsaken', ['forsaken_wings_head_refit', 'forsaken_wings_legs_refit', 'forsaken_wings_weapon', 'forsaken_wings_shoulder']) },
+    },
+    marci: {
+        default: files('marci', ['marci_base', 'marci_back', 'marci_costume', 'marci_head', 'marci_shoulders']),
+        dragon: { body: '/fighters/marci/marci_base.glb', parts: skinParts('marci', 'dragon', ['monk_of_the_dragon_school_back', 'monk_of_the_dragon_school_armor', 'monk_of_the_dragon_school_head', 'monk_of_the_dragon_school_shoulders']) },
+        bloom: { body: '/fighters/marci/marci_base.glb', parts: skinParts('marci', 'bloom', ['marci_blooming_ornaments_back', 'marci_blooming_ornaments_armor', 'marci_blooming_ornaments_head', 'marci_blooming_ornaments_shoulder']) },
+        lotus: { body: '/fighters/marci/marci_base.glb', parts: skinParts('marci', 'lotus', ['marci_lotus_keeper_back', 'marci_lotus_keeper_armor', 'marci_lotus_keeper_head', 'marci_lotus_keeper_shoulder']) },
+    },
+    dawnbreaker: {
+        default: files('dawnbreaker', ['dawnbreaker', 'dawnbreaker_armor', 'dawnbreaker_arms', 'dawnbreaker_head', 'dawnbreaker_weapon']),
+        first_light: { body: '/fighters/dawnbreaker/dawnbreaker.glb', parts: skinParts('dawnbreaker', 'first_light', ['first_light_armor', 'first_light_arms', 'first_light_head', 'first_light_weapon']) },
+        judgement: { body: '/fighters/dawnbreaker/dawnbreaker.glb', parts: skinParts('dawnbreaker', 'judgement', ['judgement_of_light_armor', 'judgement_of_light_arms', 'judgement_of_light_head', 'judgment_of_light_weapon']) },
+        astral: { body: '/fighters/dawnbreaker/dawnbreaker.glb', parts: skinParts('dawnbreaker', 'astral', ['dawnbreaker_astral_angel_armor', 'dawnbreaker_astral_angel_arms', 'dawnbreaker_astral_angel_head', 'dawnbreaker_astral_angel_weapon']) },
+    },
+}
+
+export const fighterIds = Object.keys(fighterSkins)
 const names: Record<string, string> = { tusk: 'Tusk', bristleback: 'Bristleback', vengeful: 'Shendelzare', dawnbreaker: 'Dawnbreaker', marci: 'Marci' }
+export function resolveSkin(id: string, skin = 'default') {
+    return fighterSkins[id]?.some(option => option.id === skin) ? skin : 'default'
+}
+export function fighterKit(id: string, skin = 'default') {
+    const resolved = resolveSkin(id, skin)
+    return kits[id][resolved] ?? kits[id].default
+}
 export const fighterJobs = fighterIds.flatMap(id => {
-    const [folder, files] = assets[id]
-    return files.map(file => ({ url: `/fighters/${folder}/${file}.glb`, label: names[id] }))
+    const kit = fighterKit(id, 'default')
+    return [kit.body, ...kit.parts].map(url => ({ url, label: names[id] }))
 })
+export function fighterSkinJobs(id: string, skin = 'default') {
+    const kit = fighterKit(id, skin)
+    return [kit.body, ...kit.parts].map(url => ({ url, label: names[id] }))
+}
+function pileKey(id: string, skin: string) { return `${id}::${resolveSkin(id, skin)}` }
 const dawnYaw = { right: Math.PI / 2 - 200 * Math.PI / 180, left: Math.PI / 2 - 50 * Math.PI / 180 }
 const dawnPresentYaw = (face: number) => -Math.PI / 2 + (face > 0 ? .82 : -.82)
 const dawnFightYaw = (face: number) => -Math.PI / 2 + (face > 0 ? 0.38 : -0.38)
 type FighterModel = Awaited<ReturnType<typeof loadFighter>>
 const pools = new Map<number, Map<string, FighterModel[]>>()
-function pile(presence: number, id: string) {
+function pile(presence: number, id: string, skin = 'default') {
+    const key = pileKey(id, skin)
     let group = pools.get(presence)
     if (!group) { group = new Map(); pools.set(presence, group) }
-    let items = group.get(id)
-    if (!items) { items = []; group.set(id, items) }
+    let items = group.get(key)
+    if (!items) { items = []; group.set(key, items) }
     return items
 }
-export function fighterStocked(id: string, presence = 1) { return (pools.get(presence)?.get(id)?.length ?? 0) > 0 }
-const restockQueue: { id: string; presence: number }[] = []
+export function fighterStocked(id: string, presence = 1, skin = 'default') { return pile(presence, id, skin).length > 0 }
+const restockQueue: { id: string; presence: number; skin: string }[] = []
 let restocking = false
 function pumpRestock() {
     const job = restockQueue.shift()
@@ -36,32 +125,34 @@ function pumpRestock() {
         else window.setTimeout(done, 480)
     }
     later(() => {
-        void loadFighter(job.id, job.presence).then(model => {
+        void loadFighter(job.id, job.presence, job.skin).then(model => {
             const cap = job.presence === 1 ? 1 : 2
-            if (pile(job.presence, job.id).length < cap) pile(job.presence, job.id).push(model)
+            if (pile(job.presence, job.id, job.skin).length < cap) pile(job.presence, job.id, job.skin).push(model)
         }).catch(() => { }).finally(pumpRestock)
     })
 }
-export function acquireFighter(id: string, presence = 1) {
-    const cached = pile(presence, id).pop()
+export function acquireFighter(id: string, presence = 1, skin = 'default') {
+    const resolved = resolveSkin(id, skin)
+    const cached = pile(presence, id, resolved).pop()
     if (cached) {
-        if (presence !== 1) { restockQueue.push({ id, presence }); if (!restocking) pumpRestock() }
+        if (presence !== 1) { restockQueue.push({ id, presence, skin: resolved }); if (!restocking) pumpRestock() }
         return Promise.resolve(cached)
     }
-    return loadFighter(id, presence)
+    return loadFighter(id, presence, resolved)
 }
 export function releaseFighter(model: FighterModel) {
     model.park()
     model.root.removeFromParent()
     const cap = model.presence === 1 ? 1 : 2
-    const items = pile(model.presence, model.hero)
+    const items = pile(model.presence, model.hero, model.skin)
     if (items.length < cap) items.push(model)
 }
-export async function ensureStock(id: string, presence: number, copies: number) {
-    const items = pile(presence, id)
+export async function ensureStock(id: string, presence: number, copies: number, skin = 'default') {
+    const resolved = resolveSkin(id, skin)
+    const items = pile(presence, id, resolved)
     const missing = Math.max(0, copies - items.length)
     if (!missing) return
-    const made = await Promise.all(Array.from({ length: missing }, () => loadFighter(id, presence).catch(() => null)))
+    const made = await Promise.all(Array.from({ length: missing }, () => loadFighter(id, presence, resolved).catch(() => null)))
     items.push(...made.filter((model): model is FighterModel => !!model))
 }
 export async function stockFighters(presence: number, copies: number) {
@@ -70,22 +161,53 @@ export async function stockFighters(presence: number, copies: number) {
         pile(presence, id).push(...made.filter((model): model is FighterModel => !!model))
     }
 }
-export async function loadFighter(id: string, presence = 1) {
-    const [folder, files] = assets[id]
-    const gltfs = await Promise.all(files.map(file => loadGltf(`/fighters/${folder}/${file}.glb`)))
+export async function loadFighter(id: string, presence = 1, skin = 'default') {
+    const resolved = resolveSkin(id, skin)
+    const kit = fighterKit(id, resolved)
+    const loadedParts = await Promise.all(kit.parts.map(part => loadGltf(part).catch(() => null)))
+    const gltfs = [await loadGltf(kit.body), ...loadedParts.filter((part): part is NonNullable<typeof part> => !!part)]
     const root = new T.Group(), body = cloneSkinned(gltfs[0].scene); root.add(body); root.updateMatrixWorld(true)
     const baseBones = new Map<string, T.Bone>(); body.traverse(o => { if ((o as T.Bone).isBone) baseBones.set(o.name.toLowerCase(), o as T.Bone) })
     const followers: { bone: T.Bone; source: T.Bone; offset: T.Matrix4 }[] = []
     const unmatched: string[] = []
+    const alignDelta = new T.Matrix4()
+    const sourceQuat = new T.Quaternion()
+    const accessoryQuat = new T.Quaternion()
+    function alignAccessory(partScene: T.Object3D) {
+        let anchor: T.Bone | undefined
+        let named: T.Bone | undefined
+        partScene.traverse(object => {
+            if (!(object as T.Bone).isBone) return
+            const bone = object as T.Bone
+            const key = bone.name.toLowerCase()
+            if (!baseBones.has(key) || /_end/.test(key)) return
+            if (!named && (key === 'pelvis' || key === 'weapon_0' || key === 'spine_0')) named = bone
+            anchor ??= bone
+        })
+        const accessoryBone = named ?? anchor
+        const source = accessoryBone && baseBones.get(accessoryBone.name.toLowerCase())
+        if (!source || !accessoryBone) return
+        source.updateMatrixWorld(true)
+        accessoryBone.updateMatrixWorld(true)
+        source.getWorldQuaternion(sourceQuat)
+        accessoryBone.getWorldQuaternion(accessoryQuat)
+        // First Light (and similar sets) ship a 90° bind axis vs the hero body.
+        // Identity follow preserves that tilt; snap the accessory into the body bind first.
+        if (sourceQuat.angleTo(accessoryQuat) < 0.35) return
+        alignDelta.copy(accessoryBone.matrixWorld).invert().premultiply(source.matrixWorld)
+        partScene.applyMatrix4(alignDelta)
+        partScene.updateMatrixWorld(true)
+    }
     for (const part of gltfs.slice(1)) {
         const partScene = cloneSkinned(part.scene); root.add(partScene); root.updateMatrixWorld(true)
+        alignAccessory(partScene)
         partScene.traverse(o => { if (!(o as T.Bone).isBone) return; const source = baseBones.get(o.name.toLowerCase()); if (source) followers.push({ bone: o as T.Bone, source, offset: source.matrixWorld.clone().invert().multiply(o.matrixWorld) }); else unmatched.push(o.name) })
     }
     // Preserve each accessory bind transform. Apply the animated body bone delta in world space,
     // then convert back through the actual accessory parent; hierarchy differences are supported.
     const scratchWorld = new T.Matrix4(), scratchLocal = new T.Matrix4()
     function sync() { root.updateMatrixWorld(true); for (const { bone, source, offset } of followers) { scratchWorld.copy(source.matrixWorld).multiply(offset); scratchLocal.copy(bone.parent!.matrixWorld).invert().multiply(scratchWorld); scratchLocal.decompose(bone.position, bone.quaternion, bone.scale); bone.updateMatrixWorld(true) } }
-    const mixer = new T.AnimationMixer(body), clips = new Map(gltfs[0].animations.map(c => [c.name, c])); let current: T.AnimationAction | null = null, last = '', lastPoseFrame = -1, previousX = NaN, walkHold = 0, walkDir = 0, outro = 0, outroAction = '', outroAt = 0
+    const mixer = new T.AnimationMixer(body), clips = new Map<string, T.AnimationClip>(gltfs[0].animations.map(c => [c.name, c])); let current: T.AnimationAction | null = null, last = '', lastPoseFrame = -1, previousX = NaN, walkHold = 0, walkDir = 0, outro = 0, outroAction = '', outroAt = 0
     // Normalize by the posed body mesh — not the full root AABB (weapons / wings / baskets
     // inflate height and made stocky heroes like Tusk look much smaller than Shendelzare).
     const measureClip = clips.get('fighting_idle') ?? [...clips.values()][0]
@@ -115,7 +237,7 @@ export async function loadFighter(id: string, presence = 1) {
         current = null
     }
     return {
-        root, unmatched, hero: id, presence, park, resetMotion, clips: [...clips.keys()], update(f: Fighter) {
+        root, unmatched, hero: id, skin: resolved, presence, park, resetMotion, clips: [...clips.keys()], update(f: Fighter) {
             const a = action(f); let name = a.m_pszSequenceName
             const ending = f.action === 'VICTORY_ACTION_DEFINITION' || f.action === 'DEFEAT_ACTION_DEFINITION'
             const now = performance.now()

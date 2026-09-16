@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ hero: string }>()
+const props = defineProps<{ hero: string; skin?: string }>()
 const emit = defineEmits<{ loaded: []; ready: [hero: string] }>()
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
 const heroSlot = useTemplateRef<HTMLElement>('heroSlot')
@@ -14,6 +14,7 @@ onMounted(async () => {
     canvas.value,
     heroSlot.value,
     () => props.hero,
+    () => props.skin || 'default',
     () => emit('loaded'),
     id => emit('ready', id),
   )

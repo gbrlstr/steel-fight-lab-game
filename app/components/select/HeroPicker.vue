@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { roster } from '../../game/shared/combat'
+import { fighterSkins } from '../../game/render/fighters'
 
-const props = defineProps<{ selected: string; busy: boolean; ready?: ReadonlySet<string> | Set<string> }>()
-const emit = defineEmits<{ select: [hero: string]; confirm: []; back: [] }>()
+const props = defineProps<{ selected: string; skin: string; busy: boolean; ready?: ReadonlySet<string> | Set<string> }>()
+const emit = defineEmits<{ select: [hero: string]; skin: [id: string]; confirm: []; back: [] }>()
 const heroes = ['tusk', 'bristleback', 'vengeful', 'dawnbreaker', 'marci']
+const skins = computed(() => fighterSkins[props.selected] ?? fighterSkins.tusk)
 const logo = new URL('../../assets/menu/steelfightlab_logo.png', import.meta.url).href
 const fill = new URL('../../assets/menu/button_primary_bg.png', import.meta.url).href
 const outline = new URL('../../assets/menu/button_primary_outline.png', import.meta.url).href
@@ -17,6 +19,12 @@ function keydown(event: KeyboardEvent) {
   } else if (event.code === 'ArrowLeft' || event.code === 'ArrowUp' || event.code === 'KeyA') {
     event.preventDefault()
     emit('select', heroes[(index + heroes.length - 1) % heroes.length])
+  } else if (event.code === 'Digit1' || event.code === 'Digit2' || event.code === 'Digit3' || event.code === 'Digit4') {
+    const option = skins.value[Number(event.code.slice(-1)) - 1]
+    if (option) {
+      event.preventDefault()
+      emit('skin', option.id)
+    }
   } else if (event.code === 'Enter' || event.code === 'Space') {
     event.preventDefault()
     emit('confirm')
@@ -49,6 +57,23 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
       />
     </div>
     <div class="picker-actions">
+      <div class="skin-row" role="listbox" aria-label="Fighter set">
+        <button
+          v-for="(option, index) in skins"
+          :key="option.id"
+          class="skin-chip"
+          type="button"
+          role="option"
+          :aria-selected="skin === option.id"
+          :class="{ on: skin === option.id }"
+          :disabled="busy"
+          @click="emit('skin', option.id)"
+        >
+          <small>{{ String(index + 1).padStart(2, '0') }}</small>
+          <span>{{ option.name }}</span>
+        </button>
+      </div>
+      <div class="action-row">
       <button class="back-tile" type="button" aria-label="Back" @click="emit('back')">
         <img :src="arrow" alt="">
       </button>
@@ -57,6 +82,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
         <img class="confirm-outline" :src="outline" alt="">
         <span>{{ busy ? 'PREPARING…' : 'SELECT' }}</span>
       </button>
+      </div>
     </div>
   </section>
 </template>
@@ -149,14 +175,78 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
 
 .picker-actions {
   position: absolute;
-  top: 74%;
+  top: 68%;
   left: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(12px, 2vw, 23px);
+  gap: clamp(10px, 1.4vw, 16px);
   transform: translateX(-50%);
   pointer-events: auto;
   animation: reveal-up 430ms 150ms ease-out both;
+}
+
+.skin-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(6px, .8vw, 10px);
+}
+
+.skin-chip {
+  display: grid;
+  gap: 3px;
+  min-width: clamp(86px, 10.4vw, 128px);
+  padding: 7px 8px 8px;
+  border: 1px solid #6c737b66;
+  background: linear-gradient(180deg, #1c252ecc, #0d1318e6);
+  box-shadow: inset 0 1px #ffffff10, 0 6px 14px #000a;
+  color: #c9c3ba;
+  font-family: Georgia, "Times New Roman", serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.skin-chip small {
+  color: #8d7a63;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+
+.skin-chip span {
+  display: block;
+  font-size: clamp(10px, 1.05vw, 12px);
+  font-weight: 700;
+  letter-spacing: .02em;
+  line-height: 1.15;
+}
+
+.skin-chip.on {
+  border-color: #d4b06b;
+  background: linear-gradient(180deg, #2a2418ee, #15110ce8);
+  color: #f4ead7;
+  box-shadow: inset 0 1px #ffe6a422, 0 0 0 1px #d4b06b55, 0 8px 16px #000c;
+}
+
+.skin-chip.on small {
+  color: #e2c48a;
+}
+
+.skin-chip:hover:not(:disabled):not(.on) {
+  border-color: #9aa3ab;
+  color: #efe8dc;
+}
+
+.skin-chip:disabled {
+  cursor: wait;
+  opacity: .7;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 23px);
 }
 
 .back-tile {
@@ -274,15 +364,15 @@ onBeforeUnmount(() => window.removeEventListener('keydown', keydown))
   .picker-logo { top: 4%; width: 130px; }
   .picker-heading { top: 17%; }
   .picker-heading h1 { font-size: clamp(18px, 6vw, 28px); }
-  .hero-list { top: 56%; max-width: 96vw; gap: 4px; }
-  .picker-actions { top: 79%; }
+  .hero-list { top: 52%; max-width: 96vw; gap: 4px; }
+  .picker-actions { top: 76%; }
 }
 
 @media (max-height: 520px) {
   .picker-logo { top: 2%; width: 116px; }
   .picker-heading { top: 17%; }
   .picker-heading span { margin-top: 9px; }
-  .hero-list { top: 38%; }
-  .picker-actions { top: 75%; }
+  .hero-list { top: 36%; }
+  .picker-actions { top: 70%; }
 }
 </style>

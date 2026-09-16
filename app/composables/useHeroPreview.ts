@@ -10,6 +10,7 @@ export function createHeroPreview(
   canvas: HTMLCanvasElement,
   heroSlot: HTMLElement,
   selected: () => string,
+  skinOf: () => string,
   loaded: () => void,
   onReady?: (id: string) => void,
 ) {
@@ -54,6 +55,10 @@ export function createHeroPreview(
   let width = 0
   let height = 0
   let visible = !document.hidden
+  let featured: Model | undefined
+  let featuredKey = ''
+  let featuredGen = 0
+  let loadingFeatured = false
 
   function slotOf(element: HTMLElement, view: DOMRect): Slot {
     const rect = element.getBoundingClientRect()
@@ -109,8 +114,8 @@ export function createHeroPreview(
     return face.normalize()
   }
 
-  function frame(id: string, aspect: number, close: boolean) {
-    const pos = headAt(id)
+  function frame(id: string, aspect: number, close: boolean, rigId = id) {
+    const pos = headAt(rigId)
     camera.aspect = Math.max(.2, aspect)
     camera.up.set(0, 1, 0)
     if (close) {
@@ -124,28 +129,73 @@ export function createHeroPreview(
       look.x += .55
       look.y -= id === 'bristleback' ? .16 : .42
       camera.fov = 26
-      if (id === 'bristleback') camera.position.copy(look).addScaledVector(faceForward(id), 4.45).setY(look.y + .3)
+      if (id === 'bristleback') camera.position.copy(look).addScaledVector(faceForward(rigId), 4.45).setY(look.y + .3)
       else camera.position.set(look.x + 2.95, look.y + .18, look.z + 2.95)
     }
     camera.lookAt(look)
     camera.updateProjectionMatrix()
   }
 
-  function pass(slot: Slot, id: string, close: boolean, clear: string) {
-    const model = models.get(id)
+  function pass(slot: Slot, id: string, close: boolean, clear: string, model = models.get(id)) {
     if (!model || slot.w < 2 || slot.h < 2) return
-    if (!posed.has(id)) {
+    const poseKey = model === featured ? `featured:${id}` : id
+    const rigId = model === featured ? 'featured' : id
+    if (!posed.has(poseKey)) {
       model.preview(clock, yaw[id] ?? Math.PI / 2)
-      posed.add(id)
+      posed.add(poseKey)
     }
-    models.forEach((item, key) => { item.root.visible = key === id })
-    for (const object of rigs.get(id)?.weapons ?? []) object.visible = !close
+    models.forEach((item, key) => { item.root.visible = key === id && model !== featured })
+    if (featured) featured.root.visible = model === featured
+    const weapons = rigs.get(rigId)?.weapons
+    for (const object of weapons ?? []) object.visible = !close
     renderer.setViewport(slot.x, slot.y, slot.w, slot.h)
     renderer.setScissor(slot.x, slot.y, slot.w, slot.h)
     renderer.setClearColor(clear, 0)
     renderer.clear(true, true)
-    frame(id, slot.w / slot.h, close)
+    frame(id, slot.w / slot.h, close, rigId)
     renderer.render(scene, camera)
+  }
+
+  function dropFeatured() {
+    if (!featured) return
+    scene.remove(featured.root)
+    releaseFighter(featured)
+    featured = undefined
+    featuredKey = ''
+    rigs.delete('featured')
+  }
+
+  function ensureFeatured() {
+    const id = selected()
+    const skin = skinOf()
+    const key = `${id}::${skin}`
+    if (skin === 'default') {
+      if (featured || loadingFeatured) {
+        featuredGen++
+        loadingFeatured = false
+        dropFeatured()
+      }
+      return
+    }
+    if (key === featuredKey) return
+    loadingFeatured = true
+    const gen = ++featuredGen
+    void loadFighter(id, 1, skin).then(model => {
+      if (disposed || gen !== featuredGen) {
+        releaseFighter(model)
+        return
+      }
+      dropFeatured()
+      featured = model
+      featuredKey = key
+      remember('featured', model)
+      scene.add(model.root)
+      model.root.visible = false
+    }).catch(error => {
+      console.warn(`Skin indisponível: ${id}/${skin}`, error)
+    }).finally(() => {
+      if (gen === featuredGen) loadingFeatured = false
+    })
   }
 
   function draw(now = performance.now()) {
@@ -156,13 +206,14 @@ export function createHeroPreview(
     clock += Math.min(.05, Math.max(0, (now - last) / 1000)) * .9
     last = now
     const active = selected()
+    ensureFeatured()
     posed.clear()
     renderer.setScissorTest(false)
     renderer.setViewport(0, 0, width, height)
     renderer.setClearColor(0x000000, 0)
     renderer.clear(true, true)
     renderer.setScissorTest(true)
-    pass(heroRect, active, false, '#000000')
+    pass(heroRect, active, false, '#000000', featured && featuredKey === `${active}::${skinOf()}` ? featured : models.get(active))
     heroes.forEach((hero, index) => pass(cardRects[index], hero, true, '#000000'))
   }
 
@@ -210,6 +261,7 @@ export function createHeroPreview(
     document.removeEventListener('visibilitychange', onVisibility)
     observer?.disconnect()
     window.clearTimeout(later)
+    dropFeatured()
     models.forEach(releaseFighter)
     renderer.dispose()
   }

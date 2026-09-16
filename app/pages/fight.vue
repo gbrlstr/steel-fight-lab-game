@@ -39,7 +39,7 @@ watch(() => lobby.lastEvent, event => {
   <div class="fight-app">
     <main class="fight-layout">
       <section class="ring">
-        <FightCanvas :state="state" />
+        <FightCanvas :state="state" :skins="[pick.skinOf(state.fighters[0].hero), pick.skinOf(state.fighters[1].hero)]" />
         <FightScoreboard />
         <FightVersusAlert
           :left="roster[state.fighters[0].hero].name.toUpperCase()"

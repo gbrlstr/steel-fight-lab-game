@@ -2,7 +2,7 @@
 import type { State } from '../../game/shared/combat'
 import { createFightRuntime } from '../../game/runtime/fight-runtime'
 
-const props = defineProps<{ state: State }>()
+const props = defineProps<{ state: State; skins?: string[] }>()
 const stage = useTemplateRef<HTMLElement>('stage')
 let dispose: (() => void) | undefined
 
@@ -12,6 +12,7 @@ onMounted(async () => {
   if (!root) return
   dispose = createFightRuntime(root, {
     state: props.state,
+    skins: props.skins,
     navigate: path => void navigateTo(path),
   })
 })

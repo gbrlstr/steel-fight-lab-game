@@ -27,6 +27,12 @@ function choose(hero: string) {
   selected.value = hero
 }
 
+function chooseSkin(skin: string) {
+  if (skin === pick.skinOf(selected.value)) return
+  sfx.selectHero()
+  pick.setSkin(selected.value, skin)
+}
+
 async function back() {
   if (loading.value) return
   sfx.back()
@@ -45,7 +51,10 @@ async function confirm() {
   }
   loading.value = true
   const started = performance.now()
-  await prepareMatchEntry([selected.value, rival], update => {
+  await prepareMatchEntry([
+    { id: selected.value, skin: pick.skinOf(selected.value) },
+    { id: rival, skin: pick.skinOf(rival) },
+  ], update => {
     progress.value = update.ratio
     label.value = update.label
   }).catch(error => console.warn('Partial fight preparation:', error))
@@ -62,8 +71,8 @@ async function confirm() {
     <img :src="art" alt="" class="select-backdrop">
     <div class="select-atmosphere" />
     <div class="select-grain" />
-    <SelectHeroPreviewCanvas :hero="selected" @loaded="modelsReady = true" @ready="markReady" />
-    <SelectHeroPicker :selected="selected" :busy="loading" :ready="readyHeroes" @select="choose" @confirm="confirm" @back="back" />
+    <SelectHeroPreviewCanvas :hero="selected" :skin="pick.skinOf(selected)" @loaded="modelsReady = true" @ready="markReady" />
+    <SelectHeroPicker :selected="selected" :skin="pick.skinOf(selected)" :busy="loading" :ready="readyHeroes" @select="choose" @skin="chooseSkin" @confirm="confirm" @back="back" />
     <p v-if="!modelsReady" class="absolute bottom-4 left-4 z-20 font-ui text-[9px] tracking-[.15em] text-sleet-gold">LOADING FIGHTERS…</p>
     <UiLoadingOverlay v-if="loading" :label="`${roster[selected].name} · ${label}`" :progress="progress" />
   </main>

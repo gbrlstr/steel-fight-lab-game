@@ -36,6 +36,7 @@
     "test": "node --test tests/*.test.mjs",
     "import:data": "node tools/import-data.mjs",
     "import:assets": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/import-assets.ps1",
+    "import:skins": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/import-skins.ps1",
     "validate:assets": "node tools/validate-assets.mjs"
   },
   "devDependencies": {
