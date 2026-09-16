@@ -12,6 +12,8 @@ export const fighterJobs = fighterIds.flatMap(id => {
     return files.map(file => ({ url: `/fighters/${folder}/${file}.glb`, label: names[id] }))
 })
 const dawnYaw = { right: Math.PI / 2 - 200 * Math.PI / 180, left: Math.PI / 2 - 50 * Math.PI / 180 }
+const dawnPresentYaw = (face: number) => -Math.PI / 2 + (face > 0 ? .82 : -.82)
+const dawnFightYaw = (face: number) => -Math.PI / 2 + (face > 0 ? 0.38 : -0.38)
 type FighterModel = Awaited<ReturnType<typeof loadFighter>>
 const pools = new Map<number, Map<string, FighterModel[]>>()
 function pile(presence: number, id: string) {
@@ -184,9 +186,9 @@ export async function loadFighter(id: string, presence = 1) {
                 mixer.update(0)
             }
             root.position.set(f.x * WORLD_PER_SIM, floor, 4.15)
-            if (id === 'dawnbreaker') { 
-                root.rotation.y = f.face > 0 ? dawnYaw.left : dawnYaw.right; 
-                root.scale.z = Math.abs(root.scale.z) 
+            if (id === 'dawnbreaker') {
+                root.rotation.y = dawnFightYaw(f.face)
+                root.scale.z = -Math.abs(root.scale.z)
             }
             else { root.rotation.y = Math.PI / 2; root.scale.z = Math.abs(root.scale.z) * f.face }
             sync(); if (!grounded) { const posed = new T.Box3().setFromObject(body, true); floor -= posed.min.y; root.position.y = floor; grounded = true; sync() }
@@ -233,7 +235,7 @@ export async function loadFighter(id: string, presence = 1) {
             }
             root.position.set(x, floor, 4.15)
             if (towardCamera && id === 'dawnbreaker') {
-                root.rotation.y = -Math.PI / 2 + (face > 0 ? .82 : -.82)
+                root.rotation.y = dawnPresentYaw(face)
                 root.scale.z = Math.abs(root.scale.z)
             } else if (id === 'dawnbreaker') {
                 root.rotation.y = face > 0 ? dawnYaw.left : dawnYaw.right

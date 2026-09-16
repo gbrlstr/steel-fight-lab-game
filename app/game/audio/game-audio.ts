@@ -228,9 +228,16 @@ export const sfx={
   })()
  },
  roundOver(timeout:boolean){
-  if(timeout)return speak('ui/treasure_01',.5)
-  named('misc/spectator/crowd_client01',.7)
-  return speak(Math.random()<.5?'vo/announcer_dota_fighter/dota_fighter_ko_01':'vo/announcer_dota_fighter/dota_fighter_ko_02',1)
+  const gen=lineGen
+  return (async()=>{
+   if(timeout)await speak('ui/treasure_01',.5)
+   else {
+    named('misc/spectator/crowd_client01',.7)
+    await speak(Math.random()<.5?'vo/announcer_dota_fighter/dota_fighter_ko_01':'vo/announcer_dota_fighter/dota_fighter_ko_02',1)
+   }
+   if(gen!==lineGen)return
+   await wait(3200)
+  })()
  },
  matchOver(){
   named('vo/announcer_dota_fighter/dota_fighter_victory_01',1)
