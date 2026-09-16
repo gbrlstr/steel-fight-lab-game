@@ -2,6 +2,7 @@ import { hitSparks, type HitSpark } from '../render/hit-sparks'
 import { netherSwapFx, type SwapBurst } from '../render/nether-swap'
 import { marciUnleashFx, type UnleashAura, type UnleashBurst } from '../render/marci-unleash'
 import { dawnbreakerLuminosityFx, type LuminosityBurst } from '../render/dawnbreaker-luminosity'
+import { bristlebackQuillFx, type QuillBurst } from '../render/bristleback-quill'
 import { projectileEffects, type ProjectileVisual } from '../render/projectile-effects'
 import * as T from 'three'
 import { mountArena } from '../render/arena-game'
@@ -129,8 +130,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         if (event === 'error') get('status').textContent = snapshot.status
     })
     const resize = new ResizeObserver(() => { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix(); sceneryCamera.aspect = camera.aspect; sceneryCamera.updateProjectionMatrix() }); resize.observe(stage)
-    const impacts = hitSparks(); const swaps = netherSwapFx(); const unleashFx = marciUnleashFx(); const luminosityFx = dawnbreakerLuminosityFx()
-    const sparks = new Map<string, HitSpark>(); const swapBursts = new Map<string, SwapBurst>(); const unleashBursts = new Map<string, UnleashBurst>(); const luminosityBursts = new Map<string, LuminosityBurst>()
+    const impacts = hitSparks(); const swaps = netherSwapFx(); const unleashFx = marciUnleashFx(); const luminosityFx = dawnbreakerLuminosityFx(); const quillFx = bristlebackQuillFx()
+    const sparks = new Map<string, HitSpark>(); const swapBursts = new Map<string, SwapBurst>(); const unleashBursts = new Map<string, UnleashBurst>(); const luminosityBursts = new Map<string, LuminosityBurst>(); const quillBursts = new Map<string, QuillBurst>()
     const unleashAuras: (UnleashAura | null)[] = [null, null]
     const seen = new Set<string>(); const pending: { id: string; kind: 'hit' | 'block' | 'swap' | 'install'; x: number; face: number; hero: string; action: string }[] = []; const effects = projectileEffects(); const projectiles = new Map<string, ProjectileVisual>()
     const lastAction = ['', '']
@@ -211,6 +212,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         unleashBursts.clear()
         for (const burst of luminosityBursts.values()) { actors.remove(burst.root); burst.dispose() }
         luminosityBursts.clear()
+        for (const burst of quillBursts.values()) { actors.remove(burst.root); burst.dispose() }
+        quillBursts.clear()
         for (let i = 0; i < 2; i++) {
             if (unleashAuras[i]) { actors.remove(unleashAuras[i]!.root); unleashAuras[i]!.dispose(); unleashAuras[i] = null }
         }
@@ -246,6 +249,14 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                 actors.add(cast.root)
                 luminosityBursts.set(`cast:${state.round}:${state.frame}:${i}`, cast)
             }
+            if (f.hero === 'bristleback' && f.action.startsWith('QUILLSPRAY_')) {
+                const tier = f.action.includes('FINISH') ? 1.25 : f.action.includes('4') ? 1.15 : f.action.includes('3') ? 1.08 : f.action.includes('2') ? 1.02 : 1
+                const cast = quillFx.create({ x: f.x / 300, y: 1.45 * FIGHTER_PRESENCE, z: 4.15 + .55 * FIGHTER_PRESENCE }, f.face, performance.now(), tier)
+                cast.root.scale.setScalar(FIGHTER_PRESENCE)
+                tagFx(cast.root)
+                actors.add(cast.root)
+                quillBursts.set(`cast:${state.round}:${state.frame}:${i}:${f.action}`, cast)
+            }
         })
         if (!introPlayed && loaded) { introPlayed = true; engaged = false; hideVictory(); hideRoundCall(); showVersus(); sfx.intro(state.fighters[0].hero, state.fighters[1].hero, release, onRoundPhase(false)) }
         if (prevPause === 0 && state.pause > 0 && state.winner === null) { engaged = false; hideVersus(); const finalRound = state.score.some(n => n >= RULES.wins - 1); void sfx.roundOver(state.fighters.every(f => f.hp > 0)).then(() => sfx.roundCall(finalRound, onRoundPhase(finalRound))).then(release) }
@@ -259,7 +270,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
             const kind = e.kind === 'block' ? 'block' : e.kind === 'swap' ? 'swap' : e.kind === 'install' ? 'install' : 'hit'
             pending.push({ id: e.id, kind, x: e.x, face: e.face ?? 1, hero: e.hero ?? state.fighters[0].hero, action: e.action ?? '' })
             // Nether Swap / Unleash install already cue their own cast audio.
-            if (kind === 'swap' || kind === 'install' || e.action === 'SWAP_ACTION_DEFINITION' || e.action === 'LUMINOSITY_ACTION_DEFINITION' || e.action?.startsWith('STARBREAKER_')) continue
+            if (kind === 'swap' || kind === 'install' || e.action === 'SWAP_ACTION_DEFINITION' || e.action === 'LUMINOSITY_ACTION_DEFINITION' || e.action?.startsWith('STARBREAKER_') || e.action?.startsWith('QUILLSPRAY_')) continue
             sfx.impact(e.hero ?? state.fighters[0].hero, e.action ?? '', kind === 'block' ? 'block' : 'hit')
         }
     }
@@ -332,6 +343,14 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                     actors.add(burst.root)
                     luminosityBursts.set(`hit:${e.id}`, burst)
                 }
+                if (e.kind === 'hit' && e.hero === 'bristleback' && e.action?.startsWith('QUILLSPRAY_')) {
+                    const tier = e.action.includes('FINISH') ? 1.2 : e.action.includes('4') ? 1.1 : 1
+                    const burst = quillFx.create(at, e.face, time, tier)
+                    burst.root.scale.setScalar(FIGHTER_PRESENCE * 0.85)
+                    tagFx(burst.root)
+                    actors.add(burst.root)
+                    quillBursts.set(`hit:${e.id}`, burst)
+                }
                 const spark = impacts.create(e.kind, at, e.face, time)
                 spark.root.scale.setScalar(FIGHTER_PRESENCE)
                 tagFx(spark.root)
@@ -344,6 +363,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         for (const [id, burst] of swapBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); swapBursts.delete(id) }
         for (const [id, burst] of unleashBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); unleashBursts.delete(id) }
         for (const [id, burst] of luminosityBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); luminosityBursts.delete(id) }
+        for (const [id, burst] of quillBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); quillBursts.delete(id) }
         for (let i = 0; i < 2; i++) {
             const aura = unleashAuras[i]
             const f = state.fighters[i]
@@ -374,6 +394,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         unleashFx.dispose()
         for (const burst of luminosityBursts.values()) burst.dispose()
         luminosityFx.dispose()
+        for (const burst of quillBursts.values()) burst.dispose()
+        quillFx.dispose()
         for (const effect of projectiles.values()) effect.dispose(); effects.dispose(); boxes.dispose(); outline.dispose(); renderer.dispose()
     }
 }
