@@ -163,8 +163,9 @@ export const sfx={
   if(quiet.has(actionId))return
   if(actionId==='SWAP_ACTION_DEFINITION'){pick('Hero_VengefulSpirit.NetherSwap',1);return}
   if(actionId==='PROJECTILE_ACTION_DEFINITION'&&hero==='vengeful'){pick('Hero_VengefulSpirit.MagicMissile',1);return}
+  if(actionId==='UNLEASH_ACTION_DEFINITION'){pick('Hero_Marci.Unleash.Cast',1);return}
   const def=roster[hero]?.m_vecActionDefinitions.find((a:any)=>a.m_nActionID===actionId)
-  if(!def?.m_pszSwingSound&&!def?.m_HitBox&&!def?.m_flProjectileSpeed)return
+  if(!def?.m_pszSwingSound&&!def?.m_HitBox&&!def?.m_flProjectileSpeed&&!def?.m_nInstallFrames)return
   pick(def?.m_pszSwingSound??roster[hero]?.m_pszBasicSwingSound,1)
  },
  impact(hero:string,actionId:string,kind:'hit'|'block'){
