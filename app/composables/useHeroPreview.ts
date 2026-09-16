@@ -37,6 +37,13 @@ export function createHeroPreview(
   const headQuat = new T.Quaternion()
   const axes = [new T.Vector3(1, 0, 0), new T.Vector3(-1, 0, 0), new T.Vector3(0, 0, 1), new T.Vector3(0, 0, -1)]
   const yaw: Record<string, number> = { tusk: Math.PI / 2, bristleback: Math.PI / 2, dawnbreaker: 0, marci: Math.PI / 2 + .45, vengeful: Math.PI / 2 }
+  const cardCam: Record<string, { back: number; lift: number; aim: number }> = {
+    tusk: { back: 3.95, lift: .18, aim: .18 },
+    bristleback: { back: 4.15, lift: .12, aim: .14 },
+    vengeful: { back: 2.15, lift: .12, aim: .16 },
+    dawnbreaker: { back: 2.15, lift: .12, aim: .16 },
+    marci: { back: 2.15, lift: .12, aim: .16 },
+  }
   const posed = new Set<string>()
   let heroRect: Slot = { x: 0, y: 0, w: 0, h: 0 }
   let cardRects: Slot[] = []
@@ -107,11 +114,11 @@ export function createHeroPreview(
     camera.aspect = Math.max(.2, aspect)
     camera.up.set(0, 1, 0)
     if (close) {
+      const shot = cardCam[id] ?? cardCam.marci
       look.copy(pos)
-      look.y += .16
+      look.y += shot.aim
       camera.fov = 20
-      if (id === 'bristleback') camera.position.copy(look).addScaledVector(faceForward(id), 2.3)
-      else camera.position.set(look.x + 2.15, look.y + .12, look.z + 2.15)
+      camera.position.set(look.x + shot.back, look.y + shot.lift, look.z + shot.back)
     } else {
       look.copy(pos)
       look.x += .55
