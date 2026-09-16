@@ -84,9 +84,23 @@ export async function loadFighter(id: string, presence = 1) {
     const scratchWorld = new T.Matrix4(), scratchLocal = new T.Matrix4()
     function sync() { root.updateMatrixWorld(true); for (const { bone, source, offset } of followers) { scratchWorld.copy(source.matrixWorld).multiply(offset); scratchLocal.copy(bone.parent!.matrixWorld).invert().multiply(scratchWorld); scratchLocal.decompose(bone.position, bone.quaternion, bone.scale); bone.updateMatrixWorld(true) } }
     const mixer = new T.AnimationMixer(body), clips = new Map(gltfs[0].animations.map(c => [c.name, c])); let current: T.AnimationAction | null = null, last = '', lastPoseFrame = -1, previousX = NaN, walkHold = 0, walkDir = 0, outro = 0, outroAction = '', outroAt = 0
-    const box = new T.Box3().setFromObject(root), height = box.max.y - box.min.y
+    // Normalize by the posed body mesh — not the full root AABB (weapons / wings / baskets
+    // inflate height and made stocky heroes like Tusk look much smaller than Shendelzare).
+    const measureClip = clips.get('fighting_idle') ?? [...clips.values()][0]
+    if (measureClip) {
+        const probe = mixer.clipAction(measureClip)
+        probe.play()
+        probe.time = 0
+        mixer.update(0)
+    }
+    sync()
+    root.updateMatrixWorld(true)
+    const bodyBox = new T.Box3().setFromObject(body, true)
+    const height = Math.max(0.001, bodyBox.max.y - bodyBox.min.y)
+    mixer.stopAllAction()
     // Visual scale is provisional and independent of the simulation coordinate system.
-    root.scale.setScalar(FIGHTER_TARGET_HEIGHT / height * presence); let floor = -box.min.y * root.scale.x, grounded = false
+    root.scale.setScalar(FIGHTER_TARGET_HEIGHT / height * presence)
+    let floor = -bodyBox.min.y * root.scale.x, grounded = false
     root.traverse(o => { if ((o as T.Mesh).isMesh) { o.frustumCulled = false } })
     function park() { mixer.stopAllAction(); current = null; last = ''; lastPoseFrame = -1; previousX = NaN; walkHold = 0; walkDir = 0; outro = 0; outroAction = ''; grounded = false; root.visible = true; root.traverse(o => { if (/weapon|hammer|fish|basket/i.test(o.name)) o.visible = true }) }
     function resetMotion() {
