@@ -192,6 +192,29 @@ export async function loadFighter(id: string, presence = 1) {
             if (name && clips.has(name)) { if (name !== last) { current?.stop(); current = mixer.clipAction(clips.get(name)!); current.play(); last = name } current!.time = time % Math.max(.001, clips.get(name)!.duration); mixer.update(0) }
             root.position.set(0, floor, 0); root.rotation.y = turn; root.scale.z = Math.abs(root.scale.z); sync()
             if (!grounded) { const posed = new T.Box3().setFromObject(body, true); floor -= posed.min.y; root.position.y = floor; grounded = true; sync() }
+        }, pose(clip: string, time: number, turn = 0, x = 0, z = 4.15) {
+            const name = clips.has(clip) ? clip : clips.has('fighting_victory_start') ? 'fighting_victory_start' : clips.has('fighting_idle') ? 'fighting_idle' : [...clips.keys()][0]
+            if (name && clips.has(name)) {
+                if (name !== last) {
+                    current?.stop()
+                    current = mixer.clipAction(clips.get(name)!)
+                    current.setLoop(T.LoopRepeat, Infinity)
+                    current.clampWhenFinished = false
+                    current.play()
+                    last = name
+                }
+                const duration = Math.max(.001, clips.get(name)!.duration)
+                current!.time = Math.min(duration - .001, Math.max(0, time))
+                mixer.update(0)
+            }
+            root.position.set(x, floor, z)
+            root.rotation.y = turn
+            root.scale.z = Math.abs(root.scale.z)
+            root.visible = true
+            sync()
+            if (!grounded) { const posed = new T.Box3().setFromObject(body, true); floor -= posed.min.y; root.position.y = floor; grounded = true; sync() }
+        }, clipDuration(name: string) {
+            return clips.get(name)?.duration ?? 0
         }, dispose() { park() }
     }
 }

@@ -117,7 +117,11 @@ function speak(path:string|undefined,volume=.95){
 function stopLine(){lineGen++;if(line)live.delete(line);line?.pause();line=null}
 
 function music(name:'menu'|'fight',volume:number){
- if(bedName===name&&bed&&!bed.paused)return
+ if(bedName===name&&bed&&!bed.paused){
+  bases.set(bed,volume)
+  bed.volume=heard(volume)
+  return
+ }
  stopMusic(0)
  bedName=name
  const src=url(name==='menu'?'misc/crownfall/music/fighting_menu':'misc/crownfall/music/fighting_main')
@@ -160,7 +164,8 @@ export const sfx={
  selectHero(){named('ui/panorama/panorama_player_radar_appear_01',.5)},
  back(){named('ui/menu/map_open',.4)},
  slide(){named('ui/menu/map_open',.4,.8)},
- hero(id:string){const path=voice[id];if(path)named(path,.9)},
+ present(){music('menu',.45);armed()},
+ hero(id:string){stopLine();return speak(voice[id],.95)},
  swing(hero:string,actionId:string){
   if(quiet.has(actionId))return
   if(actionId==='SWAP_ACTION_DEFINITION'){pick('Hero_VengefulSpirit.NetherSwap',1);return}
@@ -189,6 +194,19 @@ export const sfx={
    await speak('vo/announcer_dota_fighter/dota_fighter_versus')
    if(gen!==lineGen)return
    await speak(voice[b])
+   if(gen!==lineGen)return
+   await this.roundCall(false,onPhase)
+   if(gen!==lineGen)return
+   music('fight',.5)
+   onGo()
+  })()
+ },
+ /** Names already played on each hero shot; keep menu bed until FIGHT. */
+ afterPresent(onGo:()=>void,onPhase?:(phase:'round'|'fight')=>void){
+  stopLine()
+  const gen=lineGen
+  void (async()=>{
+   await speak('vo/announcer_dota_fighter/dota_fighter_versus')
    if(gen!==lineGen)return
    await this.roundCall(false,onPhase)
    if(gen!==lineGen)return
