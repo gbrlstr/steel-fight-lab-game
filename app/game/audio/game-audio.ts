@@ -161,6 +161,8 @@ export const sfx={
  hero(id:string){const path=voice[id];if(path)named(path,.9)},
  swing(hero:string,actionId:string){
   if(quiet.has(actionId))return
+  if(actionId==='SWAP_ACTION_DEFINITION'){pick('Hero_VengefulSpirit.NetherSwap',1);return}
+  if(actionId==='PROJECTILE_ACTION_DEFINITION'&&hero==='vengeful'){pick('Hero_VengefulSpirit.MagicMissile',1);return}
   const def=roster[hero]?.m_vecActionDefinitions.find((a:any)=>a.m_nActionID===actionId)
   if(!def?.m_pszSwingSound&&!def?.m_HitBox&&!def?.m_flProjectileSpeed)return
   pick(def?.m_pszSwingSound??roster[hero]?.m_pszBasicSwingSound,1)

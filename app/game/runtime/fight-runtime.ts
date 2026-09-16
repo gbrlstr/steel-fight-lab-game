@@ -1,4 +1,5 @@
 import { hitSparks, type HitSpark } from '../render/hit-sparks'
+import { netherSwapFx, type SwapBurst } from '../render/nether-swap'
 import { projectileEffects, type ProjectileVisual } from '../render/projectile-effects'
 import * as T from 'three'
 import { mountArena } from '../render/arena-game'
@@ -126,7 +127,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         if (event === 'error') get('status').textContent = snapshot.status
     })
     const resize = new ResizeObserver(() => { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix(); sceneryCamera.aspect = camera.aspect; sceneryCamera.updateProjectionMatrix() }); resize.observe(stage)
-    const impacts = hitSparks(); const sparks = new Map<string, HitSpark>(); const seen = new Set<string>(); const pending: { id: string; kind: 'hit' | 'block'; x: number; face: number; hero: string; action: string }[] = []; const effects = projectileEffects(); const projectiles = new Map<string, ProjectileVisual>()
+    const impacts = hitSparks(); const swaps = netherSwapFx(); const sparks = new Map<string, HitSpark>(); const swapBursts = new Map<string, SwapBurst>(); const seen = new Set<string>(); const pending: { id: string; kind: 'hit' | 'block' | 'swap'; x: number; face: number; hero: string; action: string }[] = []; const effects = projectileEffects(); const projectiles = new Map<string, ProjectileVisual>()
     const lastAction = ['', '']
     let prevPause = 0, introPlayed = false, matchCalled = false, engaged = false
     function showVersus() {
@@ -199,19 +200,43 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         pending.length = 0
         for (const spark of sparks.values()) { actors.remove(spark.root); spark.dispose() }
         sparks.clear()
+        for (const burst of swapBursts.values()) { actors.remove(burst.root); burst.dispose() }
+        swapBursts.clear()
         for (const effect of projectiles.values()) { actors.remove(effect.root); effect.dispose() }
         projectiles.clear()
         void fighters()
     }
     function release() { if (disposed) return; engaged = true; hideVersus(); hideRoundCall(); if (state.pause > 0) state.pause = 1 }
     function cues() {
-        state.fighters.forEach((f, i) => { if (f.action !== lastAction[i]) { lastAction[i] = f.action; if (engaged) sfx.swing(f.hero, f.action) } })
+        state.fighters.forEach((f, i) => {
+            if (f.action === lastAction[i]) return
+            lastAction[i] = f.action
+            if (!engaged) return
+            sfx.swing(f.hero, f.action)
+            if (f.action === 'SWAP_ACTION_DEFINITION') {
+                const cast = swaps.create({ x: f.x / 300, y: 1.55 * FIGHTER_PRESENCE, z: 4.15 + .55 * FIGHTER_PRESENCE }, f.face, performance.now())
+                cast.root.scale.setScalar(FIGHTER_PRESENCE * .85)
+                tagFx(cast.root)
+                actors.add(cast.root)
+                swapBursts.set(`cast:${state.round}:${state.frame}:${i}`, cast)
+            }
+        })
         if (!introPlayed && loaded) { introPlayed = true; engaged = false; hideVictory(); hideRoundCall(); showVersus(); sfx.intro(state.fighters[0].hero, state.fighters[1].hero, release, onRoundPhase(false)) }
         if (prevPause === 0 && state.pause > 0 && state.winner === null) { engaged = false; hideVersus(); const finalRound = state.score.some(n => n >= RULES.wins - 1); void sfx.roundOver(state.fighters.every(f => f.hp > 0)).then(() => sfx.roundCall(finalRound, onRoundPhase(finalRound))).then(release) }
         if (state.winner !== null && !matchCalled) { matchCalled = true; hideVersus(); hideRoundCall(); showVictory(state.winner); sfx.matchOver() }
         prevPause = state.pause
     }
-    function takeHits() { for (const e of state.events ?? []) if (!seen.has(e.id)) { seen.add(e.id); const kind = e.kind === 'block' ? 'block' : 'hit'; pending.push({ id: e.id, kind, x: e.x, face: e.face ?? 1, hero: e.hero ?? state.fighters[0].hero, action: e.action ?? '' }); sfx.impact(e.hero ?? state.fighters[0].hero, e.action ?? '', kind) } }
+    function takeHits() {
+        for (const e of state.events ?? []) {
+            if (seen.has(e.id)) continue
+            seen.add(e.id)
+            const kind = e.kind === 'block' ? 'block' : e.kind === 'swap' ? 'swap' : 'hit'
+            pending.push({ id: e.id, kind, x: e.x, face: e.face ?? 1, hero: e.hero ?? state.fighters[0].hero, action: e.action ?? '' })
+            // Nether Swap already plays on cast; skip duplicate impact blips.
+            if (kind === 'swap' || e.action === 'SWAP_ACTION_DEFINITION') continue
+            sfx.impact(e.hero ?? state.fighters[0].hero, e.action ?? '', kind === 'block' ? 'block' : 'hit')
+        }
+    }
     function animate(time: number) {
         raf = requestAnimationFrame(animate); const renderDelta = Math.min((time - last) / 1000, .15); acc += renderDelta; last = time; if (time - lastPing > 2000) { connection?.send({ type: 'ping', at: Date.now() }); lastPing = time }
         while (acc >= 1 / 60) { acc -= 1 / 60; if (loaded) { const menu = !!get<HTMLDialogElement>('movelist').open; if (network && connection) { if (!lobbySession.paused) { connection.tick(input.read(0)); if (connection.state) state = connection.state } else if (connection.state) state = connection.state } else if (!menu) state = step(state, [input.read(0), input.read(1)], engaged ? 'play' : 'move'); if ((!menu && engaged) || network) takeHits(); cues() } }
@@ -247,7 +272,29 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                 if (lobbySession.paused) get('announcement').textContent = 'PAUSE · RECONNECT'
                 else get('announcement').textContent = state.winner !== null ? '' : state.pause ? 'ROUND OVER' : ''
             }        }
-        for (const e of pending) { const i = Math.abs(state.fighters[0].x - e.x) <= Math.abs(state.fighters[1].x - e.x) ? 0 : 1; const origin = models[i]?.root.position; const spark = impacts.create(e.kind, origin ? { x: origin.x, y: origin.y + 1.55 * FIGHTER_PRESENCE, z: origin.z + .55 * FIGHTER_PRESENCE } : { x: e.x / 300, y: 1.55 * FIGHTER_PRESENCE, z: 4.15 + .55 * FIGHTER_PRESENCE }, e.face, time); spark.root.scale.setScalar(FIGHTER_PRESENCE); tagFx(spark.root); actors.add(spark.root); sparks.set(e.id, spark) } pending.length = 0; for (const [id, spark] of sparks) if (!spark.update(time)) { actors.remove(spark.root); spark.dispose(); sparks.delete(id) } if (seen.size > 4096) seen.clear()
+        for (const e of pending) {
+            const y = 1.55 * FIGHTER_PRESENCE
+            const z = 4.15 + .55 * FIGHTER_PRESENCE
+            if (e.kind === 'swap') {
+                const burst = swaps.create({ x: e.x / 300, y, z }, e.face, time)
+                burst.root.scale.setScalar(FIGHTER_PRESENCE)
+                tagFx(burst.root)
+                actors.add(burst.root)
+                swapBursts.set(e.id, burst)
+            } else {
+                const i = Math.abs(state.fighters[0].x - e.x) <= Math.abs(state.fighters[1].x - e.x) ? 0 : 1
+                const origin = models[i]?.root.position
+                const spark = impacts.create(e.kind, origin ? { x: origin.x, y: origin.y + y, z: origin.z + .55 * FIGHTER_PRESENCE } : { x: e.x / 300, y, z }, e.face, time)
+                spark.root.scale.setScalar(FIGHTER_PRESENCE)
+                tagFx(spark.root)
+                actors.add(spark.root)
+                sparks.set(e.id, spark)
+            }
+        }
+        pending.length = 0
+        for (const [id, spark] of sparks) if (!spark.update(time)) { actors.remove(spark.root); spark.dispose(); sparks.delete(id) }
+        for (const [id, burst] of swapBursts) if (!burst.update(time)) { actors.remove(burst.root); burst.dispose(); swapBursts.delete(id) }
+        if (seen.size > 4096) seen.clear()
         for (const p of state.projectiles) { let effect = projectiles.get(p.id); if (!effect) { effect = effects.create(state.fighters[p.owner].hero, state.frame); effect.root.scale.setScalar(FIGHTER_PRESENCE); tagFx(effect.root); actors.add(effect.root); projectiles.set(p.id, effect) } effect.update(p.x, p.face, state.frame) }
         for (const [id, mesh] of projectiles) if (!state.projectiles.some(p => p.id === id)) { actors.remove(mesh.root); mesh.dispose(); projectiles.delete(id) }
         boxes.update(state, showBoxes)
@@ -257,7 +304,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         renderer.clear(); renderer.render(scene, sceneryCamera); renderer.clearDepth(); camera.layers.set(0); renderer.render(actors, camera); outline.draw(actors, camera); camera.layers.set(FX_LAYER); renderer.clearDepth(); renderer.render(actors, camera); camera.layers.set(0)
     }
     void fighters(); raf = requestAnimationFrame(animate)
-    return () => { disposed = true; sfx.stop(); unsubscribeLobby(); window.removeEventListener('keydown', shortcuts); cancelAnimationFrame(raf); resize.disconnect(); input.dispose(); models.forEach(releaseFighter); for (const spark of sparks.values()) spark.dispose(); impacts.dispose(); for (const effect of projectiles.values()) effect.dispose(); effects.dispose(); boxes.dispose(); outline.dispose(); renderer.dispose() }
+    return () => { disposed = true; sfx.stop(); unsubscribeLobby(); window.removeEventListener('keydown', shortcuts); cancelAnimationFrame(raf); resize.disconnect(); input.dispose(); models.forEach(releaseFighter); for (const spark of sparks.values()) spark.dispose(); impacts.dispose(); for (const burst of swapBursts.values()) burst.dispose(); swaps.dispose(); for (const effect of projectiles.values()) effect.dispose(); effects.dispose(); boxes.dispose(); outline.dispose(); renderer.dispose() }
 }
 
 
