@@ -316,7 +316,7 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
             part.updateMatrixWorld(true)
         }
     }
-    const mixer = new T.AnimationMixer(body), clips = new Map<string, T.AnimationClip>(gltfs[0].animations.map(c => [c.name, c])); let current: T.AnimationAction | null = null, last = '', lastPoseFrame = -1, previousX = NaN, walkHold = 0, walkDir = 0, outro = 0, outroAction = '', outroAt = 0
+    const mixer = new T.AnimationMixer(body), clips = new Map<string, T.AnimationClip>(gltfs[0].animations.map(c => [c.name, c])); let current: T.AnimationAction | null = null, last = '', lastPoseFrame = -1, lastStunAge = -1, previousX = NaN, walkHold = 0, walkDir = 0, outro = 0, outroAction = '', outroAt = 0
     // Normalize by the posed body mesh — not the full root AABB (weapons / wings / baskets
     // inflate height and made stocky heroes like Tusk look much smaller than Shendelzare).
     const measureClip = clips.get('fighting_idle') ?? [...clips.values()][0]
@@ -336,9 +336,10 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
     let floor = -bodyBox.min.y * root.scale.x, grounded = false
     root.traverse(o => { if ((o as T.Mesh).isMesh) { o.frustumCulled = false } })
     healHeroMaterials(root)
-    function park() { mixer.stopAllAction(); current = null; last = ''; lastPoseFrame = -1; previousX = NaN; walkHold = 0; walkDir = 0; outro = 0; outroAction = ''; grounded = false; root.visible = true; root.traverse(o => { if (/weapon|hammer|fish|basket/i.test(o.name)) o.visible = true }) }
+    function park() { mixer.stopAllAction(); current = null; last = ''; lastPoseFrame = -1; lastStunAge = -1; previousX = NaN; walkHold = 0; walkDir = 0; outro = 0; outroAction = ''; grounded = false; root.visible = true; root.traverse(o => { if (/weapon|hammer|fish|basket/i.test(o.name)) o.visible = true }) }
     function resetMotion() {
         lastPoseFrame = -1
+        lastStunAge = -1
         previousX = NaN
         walkHold = 0
         walkDir = 0
@@ -397,11 +398,18 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
                 else if (clips.has(start)) { name = start; time = Math.max(0, startDur - .001) }
             }
             if (clips.has(name)) {
-                if (name !== last) {
+                const hitReaction = name === 'fighting_hitstun' || name === 'fighting_stun' || f.action === 'HITSTUN_ACTION_DEFINITION' || f.action === 'GUARDBREAK_ACTION_DEFINITION'
+                const retrigger = hitReaction && name === last && f.age < lastStunAge
+                if (name !== last || retrigger) {
                     current?.stop()
                     current = mixer.clipAction(clips.get(name)!)
-                    current.setLoop(T.LoopRepeat, Infinity)
-                    current.clampWhenFinished = false
+                    if (hitReaction) {
+                        current.setLoop(T.LoopOnce, 1)
+                        current.clampWhenFinished = true
+                    } else {
+                        current.setLoop(T.LoopRepeat, Infinity)
+                        current.clampWhenFinished = false
+                    }
                     current.enabled = true
                     current.play()
                     last = name
@@ -412,10 +420,16 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
                     const hold = Math.min(duration * .4, Math.max(.08, duration - .05))
                     const intro = Math.min(hold, Math.max(current!.time, 0) + 1 / 60)
                     current!.time = intro
+                } else if (hitReaction) {
+                    // Play the flinch once and freeze. Looping the 0.6s clip during long
+                    // stun (or stacking a full replay per combo hit) looks like a double take.
+                    const hold = Math.min(duration * .42, Math.max(.1, duration - .05))
+                    current!.time = Math.min(hold, Math.max(0, f.age / 60))
                 } else {
                     current!.time = ending ? time : (f.age / 60) % duration
                 }
                 mixer.update(0)
+                lastStunAge = hitReaction ? f.age : -1
             }
             root.position.set(f.x * WORLD_PER_SIM, floor, 4.15)
             if (id === 'dawnbreaker') {
