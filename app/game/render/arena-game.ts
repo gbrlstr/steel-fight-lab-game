@@ -403,10 +403,43 @@ let arenaStage: THREE.Group | null = null
 let arenaJob: Promise<THREE.Group> | null = null
 
 function rememberArena(scene: THREE.Scene, stage: THREE.Object3D) {
+  applyDotaArenaShading(stage)
+  retuneArenaEffects(stage)
   const tick = stage.userData.tickArena as ((dt: number) => void) | undefined
   if (tick) scene.userData.tickArena = tick
   if (stage.userData.atmosphereUvScrollTextures) scene.userData.atmosphereUvScrollTextures = stage.userData.atmosphereUvScrollTextures
   if (stage.userData.arenaHearthPulse) scene.userData.arenaHearthPulse = stage.userData.arenaHearthPulse
+}
+
+function retuneArenaEffects(stage: THREE.Object3D) {
+  stage.traverse(object => {
+    if ((object as THREE.PointLight).isPointLight) {
+      const light = object as THREE.PointLight
+      if (light.name === 'arenaHearthPulse') light.intensity = 0.7
+      else if (light.name === 'arenaBarWarmth') light.intensity = 0.45
+    }
+    if (!(object as THREE.Mesh).isMesh) return
+    if (object.parent?.name === 'arenaAtmosphereLayers') {
+      if (Math.abs(object.rotation.x + Math.PI / 2) < 0.2) {
+        object.visible = false
+        return
+      }
+      const fog = (object as THREE.Mesh).material as THREE.MeshBasicMaterial
+      if (!fog) return
+      fog.blending = THREE.NormalBlending
+      fog.opacity = Math.min(fog.opacity, 0.035)
+      fog.needsUpdate = true
+      return
+    }
+    const list = Array.isArray((object as THREE.Mesh).material) ? (object as THREE.Mesh).material as THREE.Material[] : [(object as THREE.Mesh).material as THREE.Material]
+    for (const material of list) {
+      const std = material as THREE.MeshStandardMaterial
+      if (!std?.isMeshStandardMaterial) continue
+      if (/tusktown|tuskfolk/i.test(std.name)) continue
+      std.emissive.setRGB(0, 0, 0)
+      std.emissiveIntensity = 0
+    }
+  })
 }
 
 export function prepareArena() {
@@ -490,11 +523,9 @@ type ArenaAtmosphereLayerSpec = {
 
 /** Opacidades baixas: planos ficam só atrás da geometria (ver `attachArenaAtmosphereLayers`). */
 const ARENA_ATMOSPHERE_LAYER_SPECS: ArenaAtmosphereLayerSpec[] = [
-  { basename: 'fog_flow_map.png', opacity: 0.09, zBias: 0, additive: true, plane: 'vertical', uvScroll: { x: 0.012, y: 0.018 } },
-  { basename: 'fog_opacity_map.png', opacity: 0.07, zBias: 0.04, plane: 'vertical' },
-  { basename: 'water_flow_map.png', opacity: 0.06, zBias: 0.08, plane: 'floor', uvScroll: { x: 0.055, y: 0 } },
-  { basename: 'fow_clouds_00.png', opacity: 0.06, zBias: 0.02, additive: true, plane: 'vertical', uvScroll: { x: 0.008, y: 0.01 } },
-  { basename: 'fow_drifts_00.png', opacity: 0.05, zBias: 0.06, plane: 'vertical', uvScroll: { x: 0, y: 0.014 } },
+  { basename: 'fog_flow_map.png', opacity: 0.035, zBias: 0, plane: 'vertical', uvScroll: { x: 0.012, y: 0.018 } },
+  { basename: 'fog_opacity_map.png', opacity: 0.03, zBias: 0.04, plane: 'vertical' },
+  { basename: 'fow_drifts_00.png', opacity: 0.025, zBias: 0.06, plane: 'vertical', uvScroll: { x: 0, y: 0.014 } },
 ]
 
 /** Aproxima `healing_campfire_flame_a.vpcf` / chamas — intensidade da luz da lareira (Three não lê .vpcf). */
@@ -503,7 +534,7 @@ function pulseArenaCampfireLights(scene: THREE.Scene, timestamp?: number) {
   const hearth = scene.userData.arenaHearthPulse as THREE.PointLight | undefined
 
   if (hearth) {
-    hearth.intensity = 1.05 + Math.sin(t * 0.007) * 0.15 + (Math.random() - 0.5) * 0.07
+    hearth.intensity = 0.7 + Math.sin(t * 0.007) * 0.1 + (Math.random() - 0.5) * 0.04
   }
 }
 
@@ -628,7 +659,7 @@ function addArenaAccentLights(scene: THREE.Scene, stageRoot: THREE.Object3D) {
   const size = bounds.getSize(new THREE.Vector3())
   const extent = Math.max(size.x, size.y, size.z, 0.01)
 
-  const hearthPool = new THREE.PointLight(0xffa060, 1.05, extent * 1.1, 2)
+  const hearthPool = new THREE.PointLight(0xffa060, 0.7, extent * 0.95, 2)
   hearthPool.name = 'arenaHearthPulse'
   hearthPool.position.set(
     center.x - size.x * 0.14,
@@ -639,7 +670,8 @@ function addArenaAccentLights(scene: THREE.Scene, stageRoot: THREE.Object3D) {
   scene.userData.arenaHearthPulse = hearthPool
   stageRoot.userData.arenaHearthPulse = hearthPool
 
-  const barWarmth = new THREE.PointLight(0xffb878, 0.62, extent * 0.95, 2)
+  const barWarmth = new THREE.PointLight(0xffb878, 0.45, extent * 0.8, 2)
+  barWarmth.name = 'arenaBarWarmth'
   barWarmth.position.set(
     center.x + size.x * 0.26,
     center.y + size.y * 0.16,
@@ -713,6 +745,53 @@ function stripInvalidArenaTextures(root: THREE.Object3D) {
       }
     }
   })
+}
+
+function applyDotaArenaShading(root: THREE.Object3D) {
+  if (root.userData.dotaUnlit) return
+  root.userData.dotaUnlit = true
+  root.traverse(child => {
+    if (!(child as THREE.Mesh).isMesh) return
+    const mesh = child as THREE.Mesh
+    if (mesh.parent?.name === 'arenaAtmosphereLayers') return
+    const list = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+    const next = list.map(toDotaMapMaterial)
+    mesh.material = Array.isArray(mesh.material) ? next : next[0]
+  })
+}
+
+function toDotaMapMaterial(material: THREE.Material) {
+  if (!material || material.userData.dotaUnlit) return material
+  const name = material.name.toLowerCase()
+  const std = material as THREE.MeshStandardMaterial
+  const baked = /fullbright|lantern_glass|tuss_tav|tusktown|primary_white|primary_black/i.test(name)
+  if (baked && std.map) {
+    const basic = new THREE.MeshBasicMaterial({
+      name: material.name,
+      map: std.map,
+      color: std.color?.clone() ?? new THREE.Color(0xffffff),
+      transparent: std.transparent,
+      opacity: std.opacity,
+      alphaTest: std.alphaTest,
+      side: std.side,
+      depthWrite: name.includes('lantern_glass') ? false : std.depthWrite,
+      blending: std.blending,
+    })
+    if (std.alphaMap) basic.alphaMap = std.alphaMap
+    basic.userData.dotaUnlit = true
+    return basic
+  }
+  if (std.isMeshStandardMaterial) {
+    std.metalness = 0
+    std.envMapIntensity = 0
+    std.roughness = Math.max(std.roughness || 0, 0.72)
+    if (std.emissiveMap && /tusktown|tuskfolk/i.test(name)) {
+      std.emissive.setRGB(1, 1, 1)
+      std.emissiveIntensity = Math.max(std.emissiveIntensity || 0, 0.85)
+    }
+  }
+  material.userData.dotaUnlit = true
+  return material
 }
 
 function prepareArenaForGameView(arena: THREE.Object3D) {

@@ -23,7 +23,6 @@ import { createLocalCpu } from '../ai/local-cpu'
 import { lobbySession } from '../net/lobby-session'
 import { frameFight } from '../render/fight-camera'
 import { createMatchIntro, INTRO_HOME, type MatchIntro } from '../render/fight-intro'
-import { createSceneBloom, heroEnvironment } from '../render/hero-look'
 import { sfx } from '../audio/game-audio'
 const escape = (v: unknown) => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
 export type FightRuntimeOptions = {
@@ -84,16 +83,26 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     window.addEventListener('keydown', shortcuts)
     const onlineState = lobbySession.connection?.state
     let selected = (onlineState ?? startingState).fighters[0].hero, state = onlineState ?? startingState, network = !!onlineState, room: any = lobbySession.room, connection = lobbySession.connection, disposed = false, generation = 0, raf = 0, last = 0, acc = 0, loaded = false, lastPing = 0, lastHud = 0
-    const input = controls(), cpuBrain = options.cpu && !onlineState ? createLocalCpu(1) : null, stage = get('stage'), scene = new T.Scene(), actors = new T.Scene(); scene.background = new T.Color('#100f14'); scene.add(new T.HemisphereLight(0xcce5ff, 0x54351e, 2)); const light = new T.DirectionalLight(0xffdec5, 3); light.position.set(0, 7, 10); scene.add(light); actors.add(light.clone(), new T.HemisphereLight(0xcce5ff, 0x54351e, 1.85), (() => { const rim = new T.DirectionalLight(0xa8c0e8, 0.85); rim.position.set(-6, 3.4, -3.2); return rim })()); actors.traverse(o => { if ((o as T.Light).isLight) o.layers.enable(1); o.layers.enable(FX_LAYER) })
+    const input = controls(), cpuBrain = options.cpu && !onlineState ? createLocalCpu(1) : null, stage = get('stage'), scene = new T.Scene(), actors = new T.Scene()
+    scene.background = new T.Color('#1a1410')
+    // Same tavern palette on both layers. Dota lights heroes with the map, not a studio HDR.
+    scene.add(new T.HemisphereLight(0xffe2c4, 0x3a2418, 0.82))
+    const tavernKey = new T.DirectionalLight(0xffd4a8, 1.12)
+    tavernKey.position.set(-2.2, 5.8, 6.8)
+    scene.add(tavernKey)
+    const windowFill = new T.DirectionalLight(0x9eb4c8, 0.28)
+    windowFill.position.set(2, 4.5, -8)
+    scene.add(windowFill)
+    const fighterKey = new T.DirectionalLight(0xffd6b0, 1.18)
+    fighterKey.position.set(-2.2, 5.8, 6.8)
+    actors.add(fighterKey, new T.HemisphereLight(0xffe2c4, 0x3a2418, 0.88), (() => { const rim = new T.DirectionalLight(0xc4d4e8, 0.28); rim.position.set(3, 3.8, -4); return rim })())
+    actors.traverse(o => { if ((o as T.Light).isLight) o.layers.enable(1); o.layers.enable(FX_LAYER) })
     const camera = new T.PerspectiveCamera(38, 1, .1, 200); camera.position.set(0, 2.55, 13.2); camera.lookAt(0, 2.05, 0)
     // The original minigame also composes the arena and heroes as separate scene layers.
     // Keep the Game arena's authored framing; following heroes must not expose the map's cut edges.
     const sceneryCamera = camera.clone()
-    const renderer = new T.WebGLRenderer({ antialias: true }); renderer.autoClear = false; renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.02; stage.append(renderer.domElement)
+    const renderer = new T.WebGLRenderer({ antialias: true }); renderer.autoClear = false; renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1; stage.append(renderer.domElement)
     renderer.setSize(stage.clientWidth, Math.max(1, stage.clientHeight))
-    actors.environment = heroEnvironment(renderer)
-    let bloom: ReturnType<typeof createSceneBloom> | null = null
-    try { bloom = createSceneBloom(renderer, { strength: 0.16, radius: 0.38, threshold: 0.9 }) } catch (error) { console.warn('Bloom indisponível', error) }
     const shadows = [0, 1].map(() => { const shadow = new T.Mesh(new T.CircleGeometry(1.33, 48), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .3, depthWrite: false })); shadow.rotation.x = -Math.PI / 2; shadow.scale.y = .4; shadow.position.y = .015; actors.add(shadow); return shadow })
     const boxes = hitboxDebug(); actors.add(boxes.root); tagFx(boxes.root)
     const outline = heroOutline(renderer)
@@ -535,9 +544,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         sceneryCamera.position.set(0, 2.55, 13.2)
         sceneryCamera.lookAt(0, 2.05, 0)
         const paint = () => { renderer.clear(); renderer.render(scene, sceneryCamera); renderer.clearDepth(); camera.layers.set(0); renderer.render(actors, camera); outline.draw(actors, camera); camera.layers.set(FX_LAYER); renderer.clearDepth(); renderer.render(actors, camera); camera.layers.set(0) }
-        if (bloom) {
-            try { bloom.begin(); paint(); bloom.end() } catch (error) { console.warn('Bloom skip', error); bloom.dispose(); bloom = null; renderer.setRenderTarget(null); paint() }
-        } else paint()
+        paint()
     }
     void fighters(); raf = requestAnimationFrame(animate)
     return () => {
@@ -555,7 +562,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         quillFx.dispose()
         for (const burst of walrusBursts.values()) burst.dispose()
         walrusFx.dispose()
-        for (const effect of projectiles.values()) effect.dispose(); effects.dispose(); boxes.dispose(); outline.dispose(); bloom?.dispose(); renderer.dispose()
+        for (const effect of projectiles.values()) effect.dispose(); effects.dispose(); boxes.dispose(); outline.dispose(); renderer.dispose()
     }
 }
 

@@ -66,7 +66,7 @@ export function healHeroMaterials(root: T.Object3D) {
                 if (!material.roughnessMap) {
                     material.roughness = Math.max(material.roughness, 0.55)
                 }
-                material.envMapIntensity = 0.72
+                material.envMapIntensity = 0.22
                 material.needsUpdate = true
             } catch {
                 if (!material.metalnessMap) material.metalness = Math.min(material.metalness, 0.12)
