@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { roster } from '../game/shared/combat'
+import { pickLocalRival } from '../game/render/fighters'
 import { prepareMatchEntry } from '../game/render/preload'
 import { sfx } from '../game/audio/game-audio'
 
@@ -41,19 +42,20 @@ async function back() {
 
 async function confirm() {
   if (loading.value) return
-  const rival = pick.p2.value || 'tusk'
-  pick.save(selected.value, rival)
   sfx.confirm()
   if (lobby.mode === 'online' && lobby.connection()) {
+    pick.save(selected.value, pick.p2.value, null)
     lobby.selectHero(selected.value)
     await navigateTo('/lobby')
     return
   }
+  const rival = pickLocalRival(selected.value)
+  pick.save(selected.value, rival.hero, rival)
   loading.value = true
   const started = performance.now()
   await prepareMatchEntry([
     { id: selected.value, skin: pick.skinOf(selected.value) },
-    { id: rival, skin: pick.skinOf(rival) },
+    { id: rival.hero, skin: rival.skin },
   ], update => {
     progress.value = update.ratio
     label.value = update.label

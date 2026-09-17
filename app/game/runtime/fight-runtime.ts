@@ -19,6 +19,7 @@ const hpPaint = (t: number) => {
 }
 import labels from '../shared/labels.json'
 import { controls } from '../input/controls'
+import { createLocalCpu } from '../ai/local-cpu'
 import { lobbySession } from '../net/lobby-session'
 import { frameFight } from '../render/fight-camera'
 import { createMatchIntro, INTRO_HOME, type MatchIntro } from '../render/fight-intro'
@@ -28,6 +29,7 @@ export type FightRuntimeOptions = {
     state?: ReturnType<typeof initial>
     navigate?: (path: '/select' | '/lobby') => void
     skins?: string[]
+    cpu?: boolean
 }
 
 export function createFightRuntime(app: HTMLElement, options: FightRuntimeOptions = {}) {
@@ -81,7 +83,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     window.addEventListener('keydown', shortcuts)
     const onlineState = lobbySession.connection?.state
     let selected = (onlineState ?? startingState).fighters[0].hero, state = onlineState ?? startingState, network = !!onlineState, room: any = lobbySession.room, connection = lobbySession.connection, disposed = false, generation = 0, raf = 0, last = 0, acc = 0, loaded = false, lastPing = 0, lastHud = 0
-    const input = controls(), stage = get('stage'), scene = new T.Scene(), actors = new T.Scene(); scene.background = new T.Color('#100f14'); scene.add(new T.HemisphereLight(0xcce5ff, 0x54351e, 2)); const light = new T.DirectionalLight(0xffdec5, 3); light.position.set(0, 7, 10); scene.add(light); actors.add(light.clone(), new T.HemisphereLight(0xcce5ff, 0x54351e, 2)); actors.traverse(o => { if ((o as T.Light).isLight) o.layers.enable(1); o.layers.enable(FX_LAYER) })
+    const input = controls(), cpuBrain = options.cpu && !onlineState ? createLocalCpu(1) : null, stage = get('stage'), scene = new T.Scene(), actors = new T.Scene(); scene.background = new T.Color('#100f14'); scene.add(new T.HemisphereLight(0xcce5ff, 0x54351e, 2)); const light = new T.DirectionalLight(0xffdec5, 3); light.position.set(0, 7, 10); scene.add(light); actors.add(light.clone(), new T.HemisphereLight(0xcce5ff, 0x54351e, 2)); actors.traverse(o => { if ((o as T.Light).isLight) o.layers.enable(1); o.layers.enable(FX_LAYER) })
     const camera = new T.PerspectiveCamera(38, 1, .1, 200); camera.position.set(0, 2.55, 13.2); camera.lookAt(0, 2.05, 0)
     // The original minigame also composes the arena and heroes as separate scene layers.
     // Keep the Game arena's authored framing; following heroes must not expose the map's cut edges.
@@ -276,6 +278,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
         }
         for (const effect of projectiles.values()) { actors.remove(effect.root); effect.dispose() }
         projectiles.clear()
+        cpuBrain?.reset()
         void fighters()
     }
     function release() {
@@ -391,7 +394,7 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
     }
     function animate(time: number) {
         raf = requestAnimationFrame(animate); const renderDelta = Math.min((time - last) / 1000, .15); acc += renderDelta; last = time; if (time - lastPing > 2000) { connection?.send({ type: 'ping', at: Date.now() }); lastPing = time }
-        while (acc >= 1 / 60) { acc -= 1 / 60; if (loaded) { const menu = !!get<HTMLDialogElement>('movelist').open; if (network && connection) { if (!lobbySession.paused) { connection.tick(input.read(0)); if (connection.state) state = connection.state } else if (connection.state) state = connection.state } else if (!menu) state = step(state, [input.read(0), input.read(1)], engaged ? 'play' : 'move'); if ((!menu && engaged) || network) takeHits(); cues() } }
+        while (acc >= 1 / 60) { acc -= 1 / 60; if (loaded) { const menu = !!get<HTMLDialogElement>('movelist').open; if (network && connection) { if (!lobbySession.paused) { connection.tick(input.read(0)); if (connection.state) state = connection.state } else if (connection.state) state = connection.state } else if (!menu) { const mode = engaged ? 'play' : 'move'; state = step(state, [input.read(0), cpuBrain ? cpuBrain.read(state, mode) : input.read(1)], mode) } if ((!menu && engaged) || network) takeHits(); cues() } }
         ;(scene.userData.tickArena as ((dt: number) => void) | undefined)?.(renderDelta)
         if (matchIntro && !matchIntro.update(time)) {
             matchIntro.dispose()
@@ -411,16 +414,21 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
             m.visible = true
             m.position.set(state.fighters[i].x / 300, .015, 4.15)
         })
+        for (let i = 0; i < 2; i++) {
+            const fighter = state.fighters[i]
+            const ratio = fighter.hp / RULES.health
+            const hp = get<HTMLElement>('hp' + i)
+            const fill = hp.firstElementChild as HTMLElement
+            if (fill) {
+                fill.style.width = `${ratio * 100}%`
+                fill.style.background = hpPaint(ratio)
+            }
+            hp.setAttribute('aria-valuenow', String(fighter.hp))
+        }
         if (time - lastHud >= 50) {
             lastHud = time
             for (let i = 0; i < 2; i++) {
                 const fighter = state.fighters[i]
-                const ratio = fighter.hp / RULES.health
-                const hp = get<HTMLElement>('hp' + i)
-                const fill = hp.firstElementChild as HTMLElement
-                fill.style.width = `${ratio * 100}%`
-                fill.style.background = hpPaint(ratio)
-                hp.setAttribute('aria-valuenow', String(fighter.hp))
                 get<HTMLProgressElement>('guard' + i).value = fighter.guard
                 const img = get<HTMLImageElement>('portrait' + i)
                 const url = portrait(fighter.hero)
@@ -432,7 +440,8 @@ export function createFightRuntime(app: HTMLElement, options: FightRuntimeOption
                 get('round' + i).querySelectorAll('img').forEach((image, n) => image.classList.toggle('won', n < state.score[i]))
                 get('shield' + i).classList.toggle('broken', fighter.guard <= 0)
                 const player = network ? room?.people.find((person: any) => person.id === room.pair[i]) : null
-                get('name' + i).textContent = (player ? player.nick + ' / ' : '') + roster[fighter.hero].name
+                const tag = player ? player.nick + ' / ' : (!network && cpuBrain && i === 1 ? 'CPU / ' : '')
+                get('name' + i).textContent = tag + roster[fighter.hero].name
             }
             get('timer').textContent = String(Math.ceil(state.remaining / 60)).padStart(2, '0')
             get('round').textContent = 'ROUND ' + String(state.round).padStart(2, '0')

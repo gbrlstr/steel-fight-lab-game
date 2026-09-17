@@ -18,7 +18,7 @@ defineProps<{ index: number; side: 'left' | 'right' }>()
       </div>
     </div>
     <div class="health-stack">
-      <div :id="`hp${index}`" class="hp" role="meter" aria-valuemin="0" :aria-valuemax="RULES.health" :aria-valuenow="RULES.health"><span /></div>
+      <div :id="`hp${index}`" class="hp" role="meter" aria-valuemin="0" :aria-valuemax="RULES.health" aria-valuenow="2000"><span /></div>
       <div class="name-row">
         <b :id="`name${index}`">TUSK</b>
         <span :id="`round${index}`" class="pips">

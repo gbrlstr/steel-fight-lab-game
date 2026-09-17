@@ -62,9 +62,9 @@ async function back() {
       <section>
         <p class="font-ui text-[9px] font-bold tracking-[.2em] text-sleet-gold">CROWNFALL · STEEL FIGHT LAB</p>
         <h1 class="my-4 text-[clamp(38px,6vw,76px)] font-black leading-[.86] text-white [text-shadow:0_6px_18px_#000]">CHOOSE HOW<br>YOU FIGHT</h1>
-        <p class="mb-6 max-w-xl font-ui text-xs leading-6 text-[#bdc8d2]">Face a rival locally or gather fighters in an online room.</p>
+        <p class="mb-6 max-w-xl font-ui text-xs leading-6 text-[#bdc8d2]">Challenge the computer or gather fighters in an online room.</p>
         <div class="grid gap-3">
-          <LobbyModeCard number="01" eyebrow="TWO PLAYERS" title="LOCAL FIGHT" description="Pick fighters on this device" interactive @select="localFight" />
+          <LobbyModeCard number="01" eyebrow="VS CPU" title="LOCAL FIGHT" description="Pick a fighter and battle the computer" interactive @select="localFight" />
           <LobbyModeCard number="02" eyebrow="MULTIPLAYER" title="ONLINE ROOM" description="Create a room or join with an invite" interactive @select="focusOnline" />
         </div>
       </section>

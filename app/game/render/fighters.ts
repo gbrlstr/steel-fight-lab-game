@@ -83,6 +83,15 @@ const kits: Record<string, Record<string, Kit>> = {
 
 export const fighterIds = Object.keys(fighterSkins)
 const names: Record<string, string> = { tusk: 'Tusk', bristleback: 'Bristleback', vengeful: 'Shendelzare', dawnbreaker: 'Dawnbreaker', marci: 'Marci' }
+export function pickLocalRival(playerHero: string, random = Math.random) {
+    const pool = fighterIds.filter(id => id !== playerHero)
+    const hero = pool[Math.floor(random() * pool.length)] || 'tusk'
+    const skins = fighterSkins[hero] ?? []
+    const alts = skins.filter(option => option.id !== 'default')
+    const choices = alts.length ? alts : skins
+    const skin = choices[Math.floor(random() * choices.length)]?.id ?? 'default'
+    return { hero, skin }
+}
 export function resolveSkin(id: string, skin = 'default') {
     return fighterSkins[id]?.some(option => option.id === skin) ? skin : 'default'
 }

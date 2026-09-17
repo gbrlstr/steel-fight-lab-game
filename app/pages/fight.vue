@@ -39,11 +39,15 @@ watch(() => lobby.lastEvent, event => {
   <div class="fight-app">
     <main class="fight-layout">
       <section class="ring">
-        <FightCanvas :state="state" :skins="[pick.skinOf(state.fighters[0].hero), pick.skinOf(state.fighters[1].hero)]" />
+        <FightCanvas
+          :state="state"
+          :cpu="!lobby.match"
+          :skins="[pick.skinOf(state.fighters[0].hero), lobby.match ? pick.skinOf(state.fighters[1].hero) : pick.rivalSkin()]"
+        />
         <FightScoreboard />
         <FightVersusAlert
           :left="roster[state.fighters[0].hero].name.toUpperCase()"
-          :right="roster[state.fighters[1].hero].name.toUpperCase()"
+          :right="(lobby.match ? '' : 'CPU / ') + roster[state.fighters[1].hero].name.toUpperCase()"
         />
         <FightRoundAlert />
         <FightVictoryAlert />
