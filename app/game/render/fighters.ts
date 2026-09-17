@@ -178,10 +178,13 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
     const root = new T.Group(), body = cloneSkinned(gltfs[0].scene); root.add(body); root.updateMatrixWorld(true)
     const baseBones = new Map<string, T.Bone>(); body.traverse(o => { if ((o as T.Bone).isBone) baseBones.set(o.name.toLowerCase(), o as T.Bone) })
     const followers: { bone: T.Bone; source: T.Bone; offset: T.Matrix4 }[] = []
+    const spearRigs: { part: T.Object3D; source: T.Bone; offset: T.Matrix4; local: T.Matrix4 }[] = []
     const unmatched: string[] = []
     const alignDelta = new T.Matrix4()
     const sourceQuat = new T.Quaternion()
     const accessoryQuat = new T.Quaternion()
+    const sourcePos = new T.Vector3()
+    const accessoryPos = new T.Vector3()
     function alignAccessory(partScene: T.Object3D) {
         let anchor: T.Bone | undefined
         let named: T.Bone | undefined
@@ -207,15 +210,60 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
         partScene.applyMatrix4(alignDelta)
         partScene.updateMatrixWorld(true)
     }
+    function bindSpear(partScene: T.Object3D, spear: T.Bone, bodySpear: T.Bone) {
+        bodySpear.updateMatrixWorld(true)
+        spear.updateMatrixWorld(true)
+        bodySpear.getWorldPosition(sourcePos)
+        spear.getWorldPosition(accessoryPos)
+        // Alt Vengeful weapons are authored against the default skeleton, where
+        // spear_1 already sits in the grip. Arcana rest leaves that helper at the
+        // origin, so per-bone follow stretches the mesh into space. Snap the
+        // accessory onto the body helper and carry the whole GLB with it.
+        if (accessoryPos.distanceTo(sourcePos) > 0.25) {
+            alignDelta.copy(spear.matrixWorld).invert().premultiply(bodySpear.matrixWorld)
+            partScene.applyMatrix4(alignDelta)
+            partScene.updateMatrixWorld(true)
+        }
+        spear.updateMatrixWorld(true)
+        spearRigs.push({
+            part: partScene,
+            source: bodySpear,
+            offset: bodySpear.matrixWorld.clone().invert().multiply(spear.matrixWorld),
+            local: partScene.matrixWorld.clone().invert().multiply(spear.matrixWorld),
+        })
+    }
     for (const part of gltfs.slice(1)) {
         const partScene = cloneSkinned(part.scene); root.add(partScene); root.updateMatrixWorld(true)
+        let spear: T.Bone | undefined
+        partScene.traverse(object => {
+            if ((object as T.Bone).isBone && object.name.toLowerCase() === 'spear_1') spear = object as T.Bone
+        })
+        const bodySpear = spear && baseBones.get('spear_1')
+        if (spear && bodySpear) {
+            bindSpear(partScene, spear, bodySpear)
+            continue
+        }
         alignAccessory(partScene)
         partScene.traverse(o => { if (!(o as T.Bone).isBone) return; const source = baseBones.get(o.name.toLowerCase()); if (source) followers.push({ bone: o as T.Bone, source, offset: source.matrixWorld.clone().invert().multiply(o.matrixWorld) }); else unmatched.push(o.name) })
     }
     // Preserve each accessory bind transform. Apply the animated body bone delta in world space,
     // then convert back through the actual accessory parent; hierarchy differences are supported.
     const scratchWorld = new T.Matrix4(), scratchLocal = new T.Matrix4()
-    function sync() { root.updateMatrixWorld(true); for (const { bone, source, offset } of followers) { scratchWorld.copy(source.matrixWorld).multiply(offset); scratchLocal.copy(bone.parent!.matrixWorld).invert().multiply(scratchWorld); scratchLocal.decompose(bone.position, bone.quaternion, bone.scale); bone.updateMatrixWorld(true) } }
+    function sync() {
+        root.updateMatrixWorld(true)
+        for (const { bone, source, offset } of followers) {
+            scratchWorld.copy(source.matrixWorld).multiply(offset)
+            scratchLocal.copy(bone.parent!.matrixWorld).invert().multiply(scratchWorld)
+            scratchLocal.decompose(bone.position, bone.quaternion, bone.scale)
+            bone.updateMatrixWorld(true)
+        }
+        for (const { part, source, offset, local } of spearRigs) {
+            scratchWorld.copy(source.matrixWorld).multiply(offset).multiply(alignDelta.copy(local).invert())
+            scratchLocal.copy(part.parent!.matrixWorld).invert().multiply(scratchWorld)
+            scratchLocal.decompose(part.position, part.quaternion, part.scale)
+            part.updateMatrixWorld(true)
+        }
+    }
     const mixer = new T.AnimationMixer(body), clips = new Map<string, T.AnimationClip>(gltfs[0].animations.map(c => [c.name, c])); let current: T.AnimationAction | null = null, last = '', lastPoseFrame = -1, previousX = NaN, walkHold = 0, walkDir = 0, outro = 0, outroAction = '', outroAt = 0
     // Normalize by the posed body mesh — not the full root AABB (weapons / wings / baskets
     // inflate height and made stocky heroes like Tusk look much smaller than Shendelzare).
