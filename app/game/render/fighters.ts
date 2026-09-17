@@ -110,7 +110,7 @@ export function fighterSkinJobs(id: string, skin = 'default') {
 function pileKey(id: string, skin: string) { return `${id}::${resolveSkin(id, skin)}` }
 const dawnYaw = { right: Math.PI / 2 - 200 * Math.PI / 180, left: Math.PI / 2 - 50 * Math.PI / 180 }
 const dawnPresentYaw = (face: number) => -Math.PI / 2 + (face > 0 ? .82 : -.82)
-const dawnFightYaw = (face: number) => -Math.PI / 2 + (face > 0 ? 0.38 : -0.38)
+const dawnFightYaw = -Math.PI / 2 + 0.28
 type FighterModel = Awaited<ReturnType<typeof loadFighter>>
 const pools = new Map<number, Map<string, FighterModel[]>>()
 function pile(presence: number, id: string, skin = 'default') {
@@ -366,8 +366,10 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
             }
             root.position.set(f.x * WORLD_PER_SIM, floor, 4.15)
             if (id === 'dawnbreaker') {
-                root.rotation.y = dawnFightYaw(f.face)
-                root.scale.z = -Math.abs(root.scale.z)
+                root.rotation.y = dawnFightYaw
+                // Bind faces a different axis than the roster, so P1 is a Z-mirror.
+                // Flip that mirror with facing — keep the same 3/4 yaw as P1.
+                root.scale.z = -Math.abs(root.scale.z) * Math.sign(f.face || 1)
             }
             else { root.rotation.y = Math.PI / 2; root.scale.z = Math.abs(root.scale.z) * f.face }
             sync(); if (!grounded) { const posed = new T.Box3().setFromObject(body, true); floor -= posed.min.y; root.position.y = floor; grounded = true; sync() }
