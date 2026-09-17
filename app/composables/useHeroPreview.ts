@@ -39,12 +39,12 @@ export function createHeroPreview(
   const headQuat = new T.Quaternion()
   const axes = [new T.Vector3(1, 0, 0), new T.Vector3(-1, 0, 0), new T.Vector3(0, 0, 1), new T.Vector3(0, 0, -1)]
   const yaw: Record<string, number> = { tusk: Math.PI / 2, bristleback: Math.PI / 2, dawnbreaker: 0, marci: Math.PI / 2 + .45, vengeful: Math.PI / 2 }
-  const cardCam: Record<string, { back: number; lift: number; aim: number }> = {
-    tusk: { back: 3.95, lift: .18, aim: .18 },
-    bristleback: { back: 4.15, lift: .12, aim: .14 },
-    vengeful: { back: 2.15, lift: .12, aim: .16 },
-    dawnbreaker: { back: 2.15, lift: .12, aim: .16 },
-    marci: { back: 2.15, lift: .12, aim: .16 },
+  const cardCam: Record<string, { back: number; lift: number; aim: number; face: number }> = {
+    tusk: { back: 3.95, lift: .18, aim: .18, face: .28 },
+    bristleback: { back: 4.15, lift: .12, aim: .14, face: .34 },
+    vengeful: { back: 2.15, lift: .12, aim: .16, face: .42 },
+    dawnbreaker: { back: 2.15, lift: .12, aim: .16, face: .44 },
+    marci: { back: 2.15, lift: .12, aim: .16, face: .36 },
   }
   const posed = new Set<string>()
   let heroRect: Slot = { x: 0, y: 0, w: 0, h: 0 }
@@ -122,6 +122,10 @@ export function createHeroPreview(
       const shot = cardCam[id] ?? cardCam.marci
       look.copy(pos)
       look.y += shot.aim
+      // Card cam sits on +X/+Z. The face mesh is in front of the head bone, so looking
+      // at the bone leaves the portrait left of the HTML frame. Aim at the face instead.
+      look.x += shot.face
+      look.z += shot.face
       camera.fov = 20
       camera.position.set(look.x + shot.back, look.y + shot.lift, look.z + shot.back)
     } else {
