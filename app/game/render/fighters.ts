@@ -232,6 +232,49 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
             local: partScene.matrixWorld.clone().invert().multiply(spear.matrixWorld),
         })
     }
+    function sourceBone(name: string) {
+        const key = name.toLowerCase()
+        const direct = baseBones.get(key)
+        if (direct) return direct
+        const seraphWing = key.match(/^lost_seraph_shoulder_wing_(0|1|2|end)_([lr])$/)
+        if (seraphWing) {
+            const slot = { '0': 'arcanawing_0_', '1': 'arcanawing_1_', '2': 'arcanawing_2_', end: 'arcanawing_finger_0_' }[seraphWing[1]]
+            return slot ? baseBones.get(slot + seraphWing[2]) : undefined
+        }
+        const countessWing = key.match(/^wing_([lr])_0([1-5])_jnt$/)
+        if (countessWing) {
+            const chain = ['arcanawing_root_', 'arcanawing_0_', 'arcanawing_1_', 'arcanawing_2_', 'arcanawing_finger_0_']
+            return baseBones.get(chain[Number(countessWing[2]) - 1] + countessWing[1])
+        }
+        if (key === 'hair2_0') return baseBones.get('arcanahaira_0')
+        if (key === 'hair2_1') return baseBones.get('arcanahaira_1')
+        if (key === 'shoulder_r') return baseBones.get('arcanashouldera_0_r')
+        if (key === 'shoulder_l') return baseBones.get('arcanashouldera_0_l')
+        return undefined
+    }
+    function bodySkinnedRatio(partScene: T.Object3D, skip: string) {
+        let body = 0, total = 0
+        partScene.traverse(object => {
+            const mesh = object as T.SkinnedMesh
+            if (!mesh.isSkinnedMesh || !mesh.skeleton || !mesh.geometry) return
+            const skin = mesh.geometry.attributes.skinIndex
+            const weight = mesh.geometry.attributes.skinWeight
+            if (!skin || !weight) return
+            for (let i = 0; i < skin.count; i++) {
+                for (let k = 0; k < 4; k++) {
+                    const index = k === 0 ? skin.getX(i) : k === 1 ? skin.getY(i) : k === 2 ? skin.getZ(i) : skin.getW(i)
+                    const amount = k === 0 ? weight.getX(i) : k === 1 ? weight.getY(i) : k === 2 ? weight.getZ(i) : weight.getW(i)
+                    const bone = mesh.skeleton.bones[index]
+                    if (!bone || amount <= 0) continue
+                    total += amount
+                    const key = bone.name.toLowerCase()
+                    if (key === skip) continue
+                    if (baseBones.has(key)) body += amount
+                }
+            }
+        })
+        return total > 0 ? body / total : 0
+    }
     for (const part of gltfs.slice(1)) {
         const partScene = cloneSkinned(part.scene); root.add(partScene); root.updateMatrixWorld(true)
         let spear: T.Bone | undefined
@@ -239,12 +282,20 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
             if ((object as T.Bone).isBone && object.name.toLowerCase() === 'spear_1') spear = object as T.Bone
         })
         const bodySpear = spear && baseBones.get('spear_1')
-        if (spear && bodySpear) {
+        // Lost Seraph skins forearm verts to elbow_R. Rigid spear follow leaves that
+        // bracer floating off the shaft. Keep per-bone follow when the mesh still
+        // uses other body bones; origin-space spears stay rigid.
+        if (spear && bodySpear && bodySkinnedRatio(partScene, 'spear_1') < 0.05) {
             bindSpear(partScene, spear, bodySpear)
             continue
         }
         alignAccessory(partScene)
-        partScene.traverse(o => { if (!(o as T.Bone).isBone) return; const source = baseBones.get(o.name.toLowerCase()); if (source) followers.push({ bone: o as T.Bone, source, offset: source.matrixWorld.clone().invert().multiply(o.matrixWorld) }); else unmatched.push(o.name) })
+        partScene.traverse(o => {
+            if (!(o as T.Bone).isBone) return
+            const source = sourceBone(o.name)
+            if (source) followers.push({ bone: o as T.Bone, source, offset: source.matrixWorld.clone().invert().multiply(o.matrixWorld) })
+            else unmatched.push(o.name)
+        })
     }
     // Preserve each accessory bind transform. Apply the animated body bone delta in world space,
     // then convert back through the actual accessory parent; hierarchy differences are supported.
