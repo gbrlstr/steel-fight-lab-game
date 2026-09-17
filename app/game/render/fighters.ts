@@ -2,7 +2,7 @@ import * as T from 'three'
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { action, FIGHTER_PRESENCE, FIGHTER_TARGET_HEIGHT, WORLD_PER_SIM, isGuardInput } from '../shared/combat'
 import type { Fighter } from '../shared/combat'
-import { loadGltf } from './asset-cache'
+import { healHeroMaterials, loadGltf } from './asset-cache'
 export { FIGHTER_PRESENCE }
 
 type Kit = { body: string; parts: string[] }
@@ -144,6 +144,7 @@ export function acquireFighter(id: string, presence = 1, skin = 'default') {
     const resolved = resolveSkin(id, skin)
     const cached = pile(presence, id, resolved).pop()
     if (cached) {
+        healHeroMaterials(cached.root)
         if (presence !== 1) { restockQueue.push({ id, presence, skin: resolved }); if (!restocking) pumpRestock() }
         return Promise.resolve(cached)
     }
@@ -334,6 +335,7 @@ export async function loadFighter(id: string, presence = 1, skin = 'default') {
     root.scale.setScalar(FIGHTER_TARGET_HEIGHT / height * presence)
     let floor = -bodyBox.min.y * root.scale.x, grounded = false
     root.traverse(o => { if ((o as T.Mesh).isMesh) { o.frustumCulled = false } })
+    healHeroMaterials(root)
     function park() { mixer.stopAllAction(); current = null; last = ''; lastPoseFrame = -1; previousX = NaN; walkHold = 0; walkDir = 0; outro = 0; outroAction = ''; grounded = false; root.visible = true; root.traverse(o => { if (/weapon|hammer|fish|basket/i.test(o.name)) o.visible = true }) }
     function resetMotion() {
         lastPoseFrame = -1

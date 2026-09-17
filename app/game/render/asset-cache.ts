@@ -47,20 +47,30 @@ function createRetryTextureLoader(manager: T.LoadingManager) {
     return loader
 }
 
-function healHeroMaterials(root: T.Object3D) {
+export function healHeroMaterials(root: T.Object3D) {
     root.traverse(object => {
         const mesh = object as T.Mesh
         if (!mesh.isMesh) return
         const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
         for (const material of materials) {
             if (!(material instanceof T.MeshStandardMaterial)) continue
-            // glTF default metalness is 1. If the ORM map never arrived, skin/cloth turns black.
-            if (!material.metalnessMap) {
-                material.metalness = Math.min(material.metalness, 0.04)
+            try {
+                // Specmask is already KHR specular. Painting it as colored emissive
+                // turns the whole hero into a neon lamp (pink Arcana, orange Marci).
+                material.emissive.setRGB(0, 0, 0)
+                material.emissiveIntensity = 0
+                // glTF default metalness is 1. If the ORM map never arrived, skin/cloth turns black.
+                if (!material.metalnessMap) {
+                    material.metalness = Math.min(material.metalness, 0.12)
+                }
+                if (!material.roughnessMap) {
+                    material.roughness = Math.max(material.roughness, 0.55)
+                }
+                material.envMapIntensity = 0.72
                 material.needsUpdate = true
-            }
-            if (!material.roughnessMap) {
-                material.roughness = Math.max(material.roughness, 0.7)
+            } catch {
+                if (!material.metalnessMap) material.metalness = Math.min(material.metalness, 0.12)
+                if (!material.roughnessMap) material.roughness = Math.max(material.roughness, 0.55)
                 material.needsUpdate = true
             }
         }
@@ -69,7 +79,10 @@ function healHeroMaterials(root: T.Object3D) {
 
 export function loadGltf(url: string, manager?: T.LoadingManager, onProgress?: (ratio: number) => void) {
     const cached = ready.get(url)
-    if (cached) return Promise.resolve(cached)
+    if (cached) {
+        healHeroMaterials(cached.scene)
+        return Promise.resolve(cached)
+    }
     const existing = pending.get(url)
     if (existing) return existing
     const mgr = manager ?? imageManager

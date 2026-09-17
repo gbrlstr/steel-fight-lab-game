@@ -19,13 +19,14 @@ export function createHeroPreview(
   renderer.setPixelRatio(Math.min(1, devicePixelRatio))
   renderer.outputColorSpace = T.SRGBColorSpace
   renderer.toneMapping = T.ACESFilmicToneMapping
+  renderer.toneMappingExposure = 1.02
   renderer.autoClear = false
   const scene = new T.Scene()
-  scene.add(new T.HemisphereLight(0xd7e7ff, 0x3a2a22, 2.4))
-  const key = new T.DirectionalLight(0xfff1dc, 3.4)
+  scene.add(new T.HemisphereLight(0xd7e7ff, 0x3a2a22, 2.2))
+  const key = new T.DirectionalLight(0xfff1dc, 3.1)
   key.position.set(1.6, 5.5, 7)
   scene.add(key)
-  const rim = new T.DirectionalLight(0x9ec0ff, 1.6)
+  const rim = new T.DirectionalLight(0x9ec0ff, 1.35)
   rim.position.set(-5, 3, -3)
   scene.add(rim)
   const camera = new T.PerspectiveCamera(30, .7, .05, 80)
@@ -54,7 +55,6 @@ export function createHeroPreview(
   let last = performance.now()
   let width = 0
   let height = 0
-  let visible = !document.hidden
   let featured: Model | undefined
   let featuredKey = ''
   let featuredGen = 0
@@ -201,10 +201,10 @@ export function createHeroPreview(
   function draw(now = performance.now()) {
     if (disposed) return
     raf = requestAnimationFrame(draw)
-    if (!visible) return
     if (root.clientWidth !== width || root.clientHeight !== height) measure()
-    clock += Math.min(.05, Math.max(0, (now - last) / 1000)) * .9
+    const dt = Math.min(.05, Math.max(0, (now - last) / 1000))
     last = now
+    clock += dt * .9
     const active = selected()
     ensureFeatured()
     posed.clear()
@@ -218,7 +218,6 @@ export function createHeroPreview(
   }
 
   function onVisibility() {
-    visible = !document.hidden
     last = performance.now()
   }
 
